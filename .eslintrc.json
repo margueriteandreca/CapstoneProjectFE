@@ -1,0 +1,44 @@
+{
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "airbnb/hooks"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "react-native/react-native": true
+    },
+    "plugins": [
+        "plugin:react/recommended",
+        "airbnb",
+        "airbnb/hooks",
+        "prettier",
+        "prettier/react"
+    ],
+    "rules": {
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/forbid-prop-types": [
+            0
+        ],
+        "react/require-default-props": [
+            0
+        ],
+        "react-native/split-platform-components": 2,
+        "global-require": [
+            0
+        ],
+        "no-underscore-dangle": [
+            0
+        ]
+    }
+}
