@@ -5,6 +5,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+import UserProfileBio from "./UserProfile/UserProfileBio";
+import UserProfileFeed from "./UserProfile/UserProfileFeed";
+import ScheduledPosts from "./ScheduledPosts";
+import PostCardFull from "./PostCardFull";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -16,7 +20,7 @@ const screenOptions = ({ route }) => ({
     switch (route.name) {
       case "HomeStack":
         return <Entypo name="home" size={24} color="black" />;
-      case "SettingsStack":
+      case "ProfileStack":
         return <FontAwesome name="user-circle-o" size={24} color="black" />;
       default:
         return <Image />;
@@ -27,10 +31,11 @@ const screenOptions = ({ route }) => ({
   tabBarShowLabel: false,
 });
 
-function SettingsScreen() {
+function ProfileScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Settings Screen!</Text>
+      <UserProfileBio />
+      <UserProfileFeed />
     </View>
   );
 }
@@ -44,7 +49,7 @@ function HomeScreen() {
         alignItems: "center",
       }}
     >
-      <Text>Home Screen!</Text>
+      <Text>This will be my FEED</Text>
     </View>
   );
 }
@@ -61,23 +66,20 @@ function HomeStack() {
   );
 }
 
-function SettingsStack() {
+function ProfileStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PostCardFull"
+        component={PostCardFull}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
-  );
-}
-
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
   );
 }
 
@@ -90,17 +92,17 @@ function BottomTabs() {
         component={HomeStack}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="SettingsStack" component={SettingsStack} />
+      <Tab.Screen name="ProfileStack" component={ProfileStack} />
     </Tab.Navigator>
   );
 }
 
-// WHAT A LOGGEF IN USER SEES
+// WHAT A LOGGED IN USER SEES
 function LoggedInNavigator() {
   return (
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={BottomTabs} />
-      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+      <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
     </Drawer.Navigator>
   );
 }
@@ -153,6 +155,7 @@ function LoggedOutNavigator() {
 }
 
 //WHERE A USER LANDS ON OPENING THE APP
+
 function App() {
   return (
     <NavigationContainer>
