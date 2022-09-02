@@ -9,6 +9,7 @@ import UserProfileBio from "./UserProfile/UserProfileBio";
 import UserProfileFeed from "./UserProfile/UserProfileFeed";
 import ScheduledPosts from "./ScheduledPosts";
 import PostCardFull from "./PostCardFull";
+import HomeFeed from "./HomeFeed";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -41,24 +42,14 @@ function ProfileScreen() {
 }
 
 function HomeScreen() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>This will be my FEED</Text>
-    </View>
-  );
+  return <HomeFeed />;
 }
 
 function HomeStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="HomeScreen"
         component={HomeScreen}
         options={{ headerShown: false }}
       />

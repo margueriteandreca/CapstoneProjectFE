@@ -14,12 +14,13 @@ function UserProfileBio() {
   return (
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>
-        <ProfilePicture />
+        <ProfilePicture isBig={true} />
         <Followers />
       </View>
       <View style={userBioStyles.bioContainer}>
         <View style={userBioStyles.bioInnerContainer}>
-          <Text>This is the Bio</Text>
+          <Text>This is the Bio •</Text>
+          <Text>This is the link</Text>
         </View>
         <TouchableOpacity style={userBioStyles.buttonContainer}>
           <Text style={userBioStyles.buttonText}>Edit Profile</Text>

@@ -8,21 +8,31 @@ import {
   StyleSheet,
 } from "react-native";
 
-function ProfilePicture() {
+function ProfilePicture({ isBig }) {
   return (
-    <View style={profilePictureStyles.container}>
+    <View
+      style={
+        isBig
+          ? profilePictureStyles.bigContainer
+          : profilePictureStyles.smallContainer
+      }
+    >
       <Image
         source={{
           uri: "https://www.beautycrew.com.au/media/42590/megan-thee-stallion-double-ponytails.jpg?width=675",
         }}
-        style={profilePictureStyles.image}
+        style={
+          isBig
+            ? profilePictureStyles.bigImage
+            : profilePictureStyles.smallImage
+        }
       />
     </View>
   );
 }
 
 const profilePictureStyles = StyleSheet.create({
-  container: {
+  bigContainer: {
     height: 86,
     width: 86,
     margin: 10,
@@ -33,9 +43,28 @@ const profilePictureStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  image: {
+  bigImage: {
     height: 80,
     width: 80,
+    margin: 10,
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: "#ffffff",
+  },
+  smallContainer: {
+    height: 36,
+    width: 36,
+    margin: 10,
+    borderRadius: 40,
+    borderWidth: 3,
+    borderColor: "#9c7aff",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  smallImage: {
+    height: 30,
+    width: 30,
     margin: 10,
     borderRadius: 40,
     borderWidth: 1,

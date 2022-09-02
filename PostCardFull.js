@@ -7,10 +7,16 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import ProfilePicture from "./Components/ProfilePicture";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 
 function PostCardFull() {
   return (
     <View style={postCardFullStyles.outerContainer}>
+      <View style={postCardFullStyles.userContainer}>
+        <ProfilePicture />
+        <Text style={postCardFullStyles.username}>@myusername</Text>
+      </View>
       <View style={postCardFullStyles.innerContainer}>
         <Image
           source={{
@@ -19,6 +25,15 @@ function PostCardFull() {
           style={postCardFullStyles.image}
         />
       </View>
+      <View style={postCardFullStyles.likesRepliesContainer}>
+        <FontAwesome name="heart-o" size={24} color="black" />
+        {/* <FontAwesome name="heart" size={24} color="red" /> */}
+        <FontAwesome name="comment-o" size={24} color="black" />
+      </View>
+
+      <View style={postCardFullStyles.repliesContainer}>
+        <Text>Comments go here</Text>
+      </View>
     </View>
   );
 }
@@ -26,16 +41,43 @@ function PostCardFull() {
 const postCardFullStyles = StyleSheet.create({
   outerContainer: {
     display: "flex",
-    height: "100%",
+    justifyContent: "flex-start",
+    height: 600,
+    width: "100%",
     // backgroundColor: "purple",
   },
   innerContainer: {
     display: "flex",
-    height: "60%",
+    height: 400,
+  },
+  userContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   image: {
     width: "100%",
     height: "100%",
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: "500",
+    letterSpacing: 0.3,
+  },
+  likesRepliesContainer: {
+    // backgroundColor: "green",
+    height: 100,
+    marginTop: 10,
+    width: 80,
+    height: 35,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  repliesContainer: {
+    width: "100%",
+    height: 90,
+    // backgroundColor: "aqua",
   },
 });
 export default PostCardFull;

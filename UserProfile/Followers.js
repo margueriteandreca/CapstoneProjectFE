@@ -11,16 +11,43 @@ import {
 function Followers() {
   return (
     <View style={followersStyles.container}>
-      <Text>followers</Text>
+      <TouchableOpacity>
+        <View style={followersStyles.innerContainer}>
+          <Text>402</Text>
+          <Text>Posts</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity>
+        <View style={followersStyles.innerContainer}>
+          <Text>4820</Text>
+          <Text>Followers</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity>
+        <View style={followersStyles.innerContainer}>
+          <Text>38</Text>
+          <Text>Following</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const followersStyles = StyleSheet.create({
   container: {
-    backgroundColor: "grey",
-    width: "70%",
+    // backgroundColor: "grey",
+    width: "75%",
     height: 120,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  innerContainer: {
+    display: "flex",
+    alignItems: "center",
   },
 });
 
