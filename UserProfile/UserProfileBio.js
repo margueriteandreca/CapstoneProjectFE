@@ -7,10 +7,17 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import ProfilePicture from "../Components/ProfilePicture";
 import Followers from "./Followers";
 
 function UserProfileBio() {
+  const { navigate } = useNavigation();
+
+  const handleOpenEditProfile = () => {
+    navigate("EditProfile");
+  };
+
   return (
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>
@@ -22,7 +29,10 @@ function UserProfileBio() {
           <Text>This is the Bio •</Text>
           <Text>This is the link</Text>
         </View>
-        <TouchableOpacity style={userBioStyles.buttonContainer}>
+        <TouchableOpacity
+          onPress={handleOpenEditProfile}
+          style={userBioStyles.buttonContainer}
+        >
           <Text style={userBioStyles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>

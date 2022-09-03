@@ -16,7 +16,9 @@ function UserProfileFeed() {
     <View style={userFeedStyles.container}>
       <FlatList
         data={[0, 1, 2, 3, 4, 5, 6, 7]}
-        renderItem={({ item }) => <PostPreview key={item} />}
+        renderItem={({ item }) => (
+          <PostPreview key={item} isScheduling={false} />
+        )}
         numColumns={3}
       />
     </View>

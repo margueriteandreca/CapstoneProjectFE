@@ -12,9 +12,9 @@ import PostPreview from "./PostPreview";
 function ScheduledPosts({ navigation }) {
   return (
     <View style={scheduledPostsStyles.container}>
-      <PostPreview />
-      <PostPreview />
-      <PostPreview />
+      <PostPreview isScheduling={true} />
+      <PostPreview isScheduling={true} />
+      <PostPreview isScheduling={true} />
     </View>
   );
 }

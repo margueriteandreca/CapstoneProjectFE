@@ -1,15 +1,22 @@
 import * as React from "react";
 import { Button, View, Text, TouchableOpacity, Image } from "react-native";
+import { useEffect, useState } from "react";
+import * as SecureStore from "expo-secure-store";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+
 import UserProfileBio from "./UserProfile/UserProfileBio";
 import UserProfileFeed from "./UserProfile/UserProfileFeed";
 import ScheduledPosts from "./ScheduledPosts";
 import PostCardFull from "./PostCardFull";
 import HomeFeed from "./HomeFeed";
+import UploadPostScreen from "./UploadPost/UploadPostScreen";
+import Scheduling from "./UploadPost/Scheduling";
+import EditProfile from "./UserProfile/EditProfile";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -70,6 +77,16 @@ function ProfileStack() {
         component={PostCardFull}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Scheduling"
+        component={Scheduling}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -94,6 +111,7 @@ function LoggedInNavigator() {
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={BottomTabs} />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
+      <Drawer.Screen name="New Post" component={UploadPostScreen} />
     </Drawer.Navigator>
   );
 }
@@ -133,21 +151,58 @@ function LoggedOutNavigator() {
     <Stack.Navigator>
       <Stack.Screen
         name="LogIn"
-        component={LogInScreen}
+        component={Login}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SignUp"
-        component={SignUpScreen}
+        component={Signup}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
 }
 
-//WHERE A USER LANDS ON OPENING THE APP
+const storeLogin = async (token) => {
+  try {
+    await SecureStore.setItemAsync("myToken", token);
+  } catch (e) {
+    console.log("ASYNC STORAGE SET ERROR", e);
+  }
+};
+
+const getLogin = async (setToken, setIsLoading) => {
+  try {
+    const token = await SecureStore.getItemAsync("myToken");
+    if (token !== null) {
+      setToken(token);
+    } else {
+      setIsLoading(false);
+    }
+  } catch (e) {
+    console.log("ASYNC STORAGE ERROR", e);
+  }
+};
+
+////////////////////////////////////////////////////////////////
 
 function App() {
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [user, setUser] = useState(null);
+  const [feedPhotos, setFeedPhotos] = useState([]);
+
+  useEffect(() => {
+    fetch()
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setFeedPhotos(data);
+      });
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

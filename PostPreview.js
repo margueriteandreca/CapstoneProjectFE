@@ -7,18 +7,23 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Animated,
 } from "react-native";
 
-function PostPreview() {
+function PostPreview({ isScheduling }) {
   const { navigate } = useNavigation();
 
   const handleOpenPost = () => {
     navigate("PostCardFull");
   };
 
+  const handleOpenScheduling = () => {
+    navigate("Scheduling");
+  };
+
   return (
     <TouchableOpacity
-      onPress={handleOpenPost}
+      onPress={isScheduling ? handleOpenScheduling : handleOpenPost}
       style={postPreviewStyles.container}
     >
       <Text>POST PREV</Text>
