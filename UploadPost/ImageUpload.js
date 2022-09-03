@@ -10,6 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 
 function ImageUpload() {
   return (

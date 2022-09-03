@@ -100,7 +100,11 @@ function BottomTabs() {
         component={HomeStack}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="ProfileStack" component={ProfileStack} />
+      <Tab.Screen
+        name="ProfileStack"
+        component={ProfileStack}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }
