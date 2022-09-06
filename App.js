@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, View, Text, TouchableOpacity, Image } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import * as SecureStore from "expo-secure-store";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -12,15 +12,22 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 import UserProfileBio from "./UserProfile/UserProfileBio";
 import UserProfileFeed from "./UserProfile/UserProfileFeed";
 import ScheduledPosts from "./ScheduledPosts";
-import PostCardFull from "./PostCardFull";
+import PostCardFull from "./Components/Posts/PostCardFull";
 import HomeFeed from "./HomeFeed";
 import UploadPostScreen from "./UploadPost/UploadPostScreen";
 import Scheduling from "./UploadPost/Scheduling";
 import EditProfile from "./UserProfile/EditProfile";
+import Login from "./LoginSignup/Login";
+import Signup from "./LoginSignup/Signup";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+
+export const TokenContext = createContext({
+  token: null,
+  setToken: () => {},
+});
 
 const screenOptions = ({ route }) => ({
   // THESE ARE THE CONFIGS OF HOW BOTTOM TABS SHOW
@@ -198,6 +205,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [feedPhotos, setFeedPhotos] = useState([]);
 
+  const tokenValue = { token, setToken };
+
   useEffect(() => {
     fetch()
       .then((res) => res.json())
@@ -208,20 +217,24 @@ function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="LoggedIn"
-          component={LoggedInNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LoggedOut"
-          component={LoggedOutNavigator}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TokenContext.Provider value={tokenValue}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={isLoggedIn ? "LoggedIn" : "LoggedOut"}
+        >
+          <Stack.Screen
+            name="LoggedIn"
+            component={LoggedInNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LoggedOut"
+            component={LoggedOutNavigator}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TokenContext.Provider>
   );
 }
 

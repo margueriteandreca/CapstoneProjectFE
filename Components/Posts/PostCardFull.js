@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import ProfilePicture from "./Components/ProfilePicture";
+import ProfilePicture from "../ProfilePicture";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 
 function PostCardFull() {

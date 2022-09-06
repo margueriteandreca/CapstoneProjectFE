@@ -9,7 +9,7 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import PostPreview from "../PostPreview";
+import PostPreview from "../Components/Posts/PostPreview";
 
 function UserProfileFeed() {
   return (

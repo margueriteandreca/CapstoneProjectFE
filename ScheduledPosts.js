@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import PostPreview from "./PostPreview";
+import PostPreview from "./Components/Posts/PostPreview";
 
 function ScheduledPosts({ navigation }) {
   return (

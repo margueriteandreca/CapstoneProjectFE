@@ -8,7 +8,7 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import PostCardFull from "./PostCardFull";
+import PostCardFull from "./Components/Posts/PostCardFull";
 
 function HomeFeed() {
   return (
