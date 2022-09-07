@@ -11,23 +11,25 @@ import { useNavigation } from "@react-navigation/native";
 import ProfilePicture from "../Components/ProfilePicture";
 import Followers from "./Followers";
 
-function UserProfileBio() {
+function UserProfileBio({ userBio }) {
   const { navigate } = useNavigation();
 
   const handleOpenEditProfile = () => {
     navigate("EditProfile");
   };
 
+  console.log(userBio);
+
   return (
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>
-        <ProfilePicture isBig={true} />
+        <ProfilePicture isBig={true} avatar={userBio.avatar} />
         <Followers />
       </View>
       <View style={userBioStyles.bioContainer}>
         <View style={userBioStyles.bioInnerContainer}>
-          <Text>This is the Bio •</Text>
-          <Text>This is the link</Text>
+          <Text>{`${userBio.bio} •`}</Text>
+          <Text>{`${userBio.bio_link}`}</Text>
         </View>
         <TouchableOpacity
           onPress={handleOpenEditProfile}

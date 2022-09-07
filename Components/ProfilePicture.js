@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-function ProfilePicture({ isBig }) {
+function ProfilePicture({ isBig, avatar }) {
   return (
     <View
       style={
@@ -18,9 +18,7 @@ function ProfilePicture({ isBig }) {
       }
     >
       <Image
-        source={{
-          uri: "https://www.beautycrew.com.au/media/42590/megan-thee-stallion-double-ponytails.jpg?width=675",
-        }}
+        source={{ uri: `http://127.0.0.1:8000/${avatar}` }}
         style={
           isBig
             ? profilePictureStyles.bigImage

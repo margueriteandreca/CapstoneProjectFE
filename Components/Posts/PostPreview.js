@@ -10,7 +10,7 @@ import {
   Animated,
 } from "react-native";
 
-function PostPreview({ isScheduling }) {
+function PostPreview({ isScheduling, post }) {
   const { navigate } = useNavigation();
 
   const handleOpenPost = () => {
@@ -26,18 +26,29 @@ function PostPreview({ isScheduling }) {
       onPress={isScheduling ? handleOpenScheduling : handleOpenPost}
       style={postPreviewStyles.container}
     >
-      <Text>POST PREV</Text>
+      <View style={postPreviewStyles.textContainer}>
+        <Text>{post.text}</Text>
+      </View>
     </TouchableOpacity>
   );
 }
 
 const postPreviewStyles = StyleSheet.create({
   container: {
-    backgroundColor: "blue",
+    backgroundColor: "white",
     width: "33%",
     aspectRatio: 1,
     marginTop: 3,
     marginRight: 3,
+  },
+  textContainer: {
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

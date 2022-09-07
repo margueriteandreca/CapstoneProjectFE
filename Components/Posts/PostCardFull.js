@@ -10,7 +10,9 @@ import {
 import ProfilePicture from "../ProfilePicture";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 
-function PostCardFull() {
+function PostCardFull({ item }) {
+  const { text, images, like_count, user } = item;
+
   function handleOnLike() {
     fetch("", {
       method: "PATCH",
@@ -30,16 +32,20 @@ function PostCardFull() {
   return (
     <View style={postCardFullStyles.outerContainer}>
       <View style={postCardFullStyles.userContainer}>
-        <ProfilePicture />
-        <Text style={postCardFullStyles.username}>@myusername</Text>
+        <ProfilePicture avatar={user.avatar} />
+        <Text style={postCardFullStyles.username}>{`@${user.username}`}</Text>
       </View>
       <View style={postCardFullStyles.innerContainer}>
-        <Image
-          source={{
-            uri: "https://www.beautycrew.com.au/media/42590/megan-thee-stallion-double-ponytails.jpg?width=675",
-          }}
-          style={postCardFullStyles.image}
-        />
+        {images[0] ? (
+          <Image
+            source={{ uri: `http://127.0.0.1:8000/${images[0].image}` }}
+            style={postCardFullStyles.image}
+          />
+        ) : (
+          <View style={postCardFullStyles.textContainer}>
+            <Text style={postCardFullStyles.text}>{text}</Text>
+          </View>
+        )}
       </View>
       <View style={postCardFullStyles.likesRepliesContainer}>
         <FontAwesome name="heart-o" size={24} color="black" />
@@ -47,7 +53,9 @@ function PostCardFull() {
         <FontAwesome name="comment-o" size={24} color="black" />
       </View>
       <View style={postCardFullStyles.likesContainer}>
-        <Text>49503 Likes</Text>
+        <Text>
+          {`${like_count}`} {like_count === 1 ? `like` : `likes`}
+        </Text>
       </View>
 
       <View style={postCardFullStyles.repliesContainer}>
@@ -79,6 +87,19 @@ const postCardFullStyles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  textContainer: {
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontFamily: "Times New Roman",
+    fontSize: 18,
   },
   username: {
     fontSize: 18,

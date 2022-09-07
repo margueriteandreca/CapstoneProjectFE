@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   Button,
   View,
@@ -9,11 +10,24 @@ import {
   StyleSheet,
 } from "react-native";
 import { useEffect, useState } from "react";
+import * as SecureStore from "expo-secure-store";
 import { TokenContext } from "../App";
+
+const storeLogin = async (token) => {
+  console.log("!!! trying token", token);
+  try {
+    await SecureStore.setItemAsync("myToken", token);
+    console.log("!!! stored token", token);
+  } catch (e) {
+    console.log("ASYNC STORAGE SET ERROR", e);
+  }
+};
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const { navigate } = useNavigation();
 
   const { token, setToken } = useContext(TokenContext);
   console.log(token);
@@ -29,13 +43,21 @@ function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log("!!!! data: ", data);
         setToken(data.access);
+        storeLogin(data.access);
       });
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        paddingTop: 500,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <TextInput
         style={styles.input}
         onChangeText={setUsername}
@@ -77,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3777f0",
     width: 180,
     height: 40,
-    borderRadius: 5,
+    borderRadius: 20,
   },
   loginText: {
     color: "white",

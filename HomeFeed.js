@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Button,
   View,
@@ -9,14 +9,32 @@ import {
   FlatList,
 } from "react-native";
 import PostCardFull from "./Components/Posts/PostCardFull";
+import { TokenContext } from "./App";
 
 function HomeFeed() {
+  const [feedPhotos, setFeedPhotos] = useState([]);
+
+  const { token } = useContext(TokenContext);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/feed/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`FEED DATA`, data);
+        setFeedPhotos(data);
+      });
+  }, []);
+
   return (
     <FlatList
-      data={[0, 1, 2, 3, 4, 5, 6, 7]}
+      data={feedPhotos}
       renderItem={({ item }) => (
         <View style={{ height: 600, width: "100%" }}>
-          <PostCardFull key={item} />
+          <PostCardFull key={item.id} item={item} />
         </View>
       )}
     />

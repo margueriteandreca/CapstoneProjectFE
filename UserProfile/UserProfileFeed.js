@@ -11,13 +11,13 @@ import {
 } from "react-native";
 import PostPreview from "../Components/Posts/PostPreview";
 
-function UserProfileFeed() {
+function UserProfileFeed({ userFeed }) {
   return (
     <View style={userFeedStyles.container}>
       <FlatList
-        data={[0, 1, 2, 3, 4, 5, 6, 7]}
+        data={userFeed}
         renderItem={({ item }) => (
-          <PostPreview key={item} isScheduling={false} />
+          <PostPreview key={item} isScheduling={false} post={item} />
         )}
         numColumns={3}
       />
@@ -29,7 +29,6 @@ const userFeedStyles = StyleSheet.create({
   container: {
     width: "100%",
     height: "60%",
-    // backgroundColor: "red",
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
