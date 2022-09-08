@@ -43,7 +43,7 @@ function PostCardFull({ item }) {
           />
         ) : (
           <View style={postCardFullStyles.textContainer}>
-            <Text style={postCardFullStyles.text}>{text}</Text>
+            <Text style={postCardFullStyles.text}>{item ? text : null}</Text>
           </View>
         )}
       </View>

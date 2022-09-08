@@ -18,7 +18,7 @@ function ProfileScreen() {
   const { token } = useContext(TokenContext);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/profile/8`, {
+    fetch(`http://127.0.0.1:8000/profile/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,7 +32,13 @@ function ProfileScreen() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {userProfile.user && <UserProfileBio userBio={userProfile.user} />}
+      {userProfile.user && (
+        <UserProfileBio
+          userBio={userProfile.user}
+          userPosts={userProfile.posts}
+          isMe={true}
+        />
+      )}
       {userProfile.posts && <UserProfileFeed userFeed={userProfile.posts} />}
     </View>
   );

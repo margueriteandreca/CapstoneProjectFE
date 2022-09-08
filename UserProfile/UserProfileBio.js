@@ -11,32 +11,34 @@ import { useNavigation } from "@react-navigation/native";
 import ProfilePicture from "../Components/ProfilePicture";
 import Followers from "./Followers";
 
-function UserProfileBio({ userBio }) {
+function UserProfileBio({ userBio, userPosts, isMe }) {
   const { navigate } = useNavigation();
 
   const handleOpenEditProfile = () => {
-    navigate("EditProfile");
+    navigate("EditProfile", {
+      userBio,
+    });
   };
-
-  console.log(userBio);
 
   return (
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>
         <ProfilePicture isBig={true} avatar={userBio.avatar} />
-        <Followers />
+        <Followers posts={userPosts} following={userBio.following} />
       </View>
       <View style={userBioStyles.bioContainer}>
         <View style={userBioStyles.bioInnerContainer}>
           <Text>{`${userBio.bio} •`}</Text>
           <Text>{`${userBio.bio_link}`}</Text>
         </View>
-        <TouchableOpacity
-          onPress={handleOpenEditProfile}
-          style={userBioStyles.buttonContainer}
-        >
-          <Text style={userBioStyles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
+        {isMe && (
+          <TouchableOpacity
+            onPress={handleOpenEditProfile}
+            style={userBioStyles.buttonContainer}
+          >
+            <Text style={userBioStyles.buttonText}>Edit Profile</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -49,7 +51,6 @@ const userBioStyles = StyleSheet.create({
     flexWrap: "wrap",
     width: "100%",
     height: "40%",
-    // backgroundColor: "purple",
     justifyContent: "center",
   },
   buttonContainer: {
@@ -57,7 +58,7 @@ const userBioStyles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
+    backgroundColor: "#3777f0",
     borderRadius: 10,
   },
   buttonText: {

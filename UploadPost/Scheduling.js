@@ -19,6 +19,9 @@ function Scheduling() {
       </View>
       <View style={schedulingStyles.dateTimeContainer}>
         <Clock />
+        <TouchableOpacity style={schedulingStyles.saveButtonContainer}>
+          <Text>Save</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -39,6 +42,11 @@ const schedulingStyles = StyleSheet.create({
     height: 200,
     width: "100%",
     backgroundColor: "green",
+  },
+  saveButtonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

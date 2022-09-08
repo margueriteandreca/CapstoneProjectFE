@@ -22,10 +22,20 @@ const Tab = createMaterialTopTabNavigator();
 function UploadPostScreen() {
   const [isText, setIsText] = useState(true);
 
+  // const [image, setImage] = useState(null);
+
   const { navigate } = useNavigation();
 
   const handleOpenScheduling = () => {
-    navigate("Scheduling");
+    navigate("ProfileStack", { screen: "Scheduling" });
+  };
+
+  const UploadPost = () => {
+    fetch("")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
   };
 
   return (
@@ -38,15 +48,25 @@ function UploadPostScreen() {
       </View>
 
       <View style={uploadStyles.schedulingContainer}>
-        <TouchableOpacity
-          onPress={handleOpenScheduling}
-          style={uploadStyles.buttonContainer}
-        >
-          <Text style={uploadStyles.schedulingText}> Schedule Post</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleOpenScheduling}>
-          <Text style={uploadStyles.draftsText}> Save to drafts</Text>
-        </TouchableOpacity>
+        <View style={uploadStyles.uploadNow}>
+          <TouchableOpacity>
+            <Text>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Share</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={handleOpenScheduling}
+            style={uploadStyles.buttonContainer}
+          >
+            <Text style={uploadStyles.schedulingText}> Schedule Post</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenScheduling}>
+            <Text style={uploadStyles.draftsText}> Save to drafts</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -63,9 +83,16 @@ const uploadStyles = StyleSheet.create({
     height: 400,
     width: "100%",
   },
+  uploadNow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "60%",
+  },
   schedulingContainer: {
     display: "flex",
-    justifyContent: "center",
+    height: "40%",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   schedulingText: {
@@ -80,7 +107,8 @@ const uploadStyles = StyleSheet.create({
     width: 220,
     height: 50,
     borderRadius: 10,
-    backgroundColor: "green",
+    backgroundColor: "#3777f0",
+    marginBottom: 10,
   },
   draftsText: {
     fontSize: 14,

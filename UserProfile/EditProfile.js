@@ -13,14 +13,38 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import ProfilePicture from "../Components/ProfilePicture";
 
-function EditProfile() {
-  //user will be passed down to populate placeholder info
-  //fetch PATCH here to users
+///MUST ADD GOBACK
+
+function EditProfile({ route, navigation }) {
+  const { userBio } = route.params;
+  console.log(userBio);
+
+  const [image, setImage] = useState(userBio.avatar);
+
+  const handleUpdateBio = () => {
+    fetch().then().then();
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   return (
     <View style={editProfileStyles.inputFormContainer}>
-      <ProfilePicture isBig={true} />
-      <TouchableOpacity style={editProfileStyles.buttonContainer}>
+      <ProfilePicture isBig={true} avatar={image} />
+      <TouchableOpacity
+        style={editProfileStyles.buttonContainer}
+        onPress={pickImage}
+      >
         <Text style={editProfileStyles.buttonText}>Change profile photo</Text>
       </TouchableOpacity>
       <View style={editProfileStyles.inputFormContainer}>
@@ -28,6 +52,7 @@ function EditProfile() {
           <Text>First Name</Text>
           <TextInput
             placeholder="First Name"
+            defaultValue={userBio.first_name}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -35,6 +60,7 @@ function EditProfile() {
           <Text>Last Name</Text>
           <TextInput
             placeholder="Last Name"
+            defaultValue={userBio.last_name}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -42,6 +68,7 @@ function EditProfile() {
           <Text>Bio</Text>
           <TextInput
             placeholder="Bio"
+            defaultValue={userBio.bio}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -49,6 +76,7 @@ function EditProfile() {
           <Text>Link</Text>
           <TextInput
             placeholder="insert link"
+            defaultValue={userBio.bio_link}
             style={editProfileStyles.inputContainer}
           />
         </View>

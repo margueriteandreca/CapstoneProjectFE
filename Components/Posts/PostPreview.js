@@ -18,7 +18,7 @@ function PostPreview({ isScheduling, post }) {
   };
 
   const handleOpenScheduling = () => {
-    navigate("Scheduling");
+    navigate("ProfileStack", { screen: "Scheduling" });
   };
 
   return (
@@ -27,7 +27,7 @@ function PostPreview({ isScheduling, post }) {
       style={postPreviewStyles.container}
     >
       <View style={postPreviewStyles.textContainer}>
-        <Text>{post.text}</Text>
+        <Text>{post ? post.text : null}</Text>
       </View>
     </TouchableOpacity>
   );

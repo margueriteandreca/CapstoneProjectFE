@@ -8,12 +8,13 @@ import {
   StyleSheet,
 } from "react-native";
 
-function Followers() {
+function Followers({ posts, following }) {
+  console.log("CHILD POSTS", posts);
   return (
     <View style={followersStyles.container}>
       <TouchableOpacity>
         <View style={followersStyles.innerContainer}>
-          <Text>402</Text>
+          <Text>{posts.length}</Text>
           <Text>Posts</Text>
         </View>
       </TouchableOpacity>
@@ -27,7 +28,7 @@ function Followers() {
 
       <TouchableOpacity>
         <View style={followersStyles.innerContainer}>
-          <Text>38</Text>
+          <Text>{following.length}</Text>
           <Text>Following</Text>
         </View>
       </TouchableOpacity>

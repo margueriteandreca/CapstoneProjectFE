@@ -3,25 +3,26 @@ import { Button, View, Text, TouchableOpacity, Image } from "react-native";
 import { useEffect, useState, createContext } from "react";
 import * as SecureStore from "expo-secure-store";
 
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 
-import UserProfileBio from "./UserProfile/UserProfileBio";
-import UserProfileFeed from "./UserProfile/UserProfileFeed";
 import ScheduledPosts from "./ScheduledPosts";
 import PostCardFull from "./Components/Posts/PostCardFull";
 import HomeFeed from "./HomeFeed";
 import UploadPostScreen from "./UploadPost/UploadPostScreen";
 import Scheduling from "./UploadPost/Scheduling";
 import EditProfile from "./UserProfile/EditProfile";
-import Login from "./LoginSignup/Login";
-import Signup from "./LoginSignup/Signup";
 import LoginSignUp from "./LoginSignup/LoginSignUp";
 import ProfileScreen from "./UserProfile/ProfileScreen";
+import LogoutFooter from "./LogoutFooter";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -110,10 +111,25 @@ function BottomTabs() {
   );
 }
 
+//LOG OUT CUSTOMER FOOTER
+const CustomDrawer = (props) => {
+  return (
+    <View style={{ flex: 1, justifyContent: "space-between" }}>
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+      <LogoutFooter />
+    </View>
+  );
+};
+
 // WHAT A LOGGED IN USER SEES
 function LoggedInNavigator() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={(props) => <CustomDrawer {...props} />}
+    >
       <Drawer.Screen name="Home" component={BottomTabs} />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
       <Drawer.Screen name="New Post" component={UploadPostScreen} />
@@ -158,6 +174,16 @@ const getToken = async (setToken, setIsLoading) => {
   }
 };
 
+const deleteToken = async () => {
+  console.log("!!! trying token");
+  try {
+    await SecureStore.deleteItemAsync("myToken");
+    console.log("!!! delete stored token");
+  } catch (e) {
+    console.log("ASYNC STORAGE DELETE ERROR", e);
+  }
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 function App() {
@@ -178,6 +204,9 @@ function App() {
   useEffect(() => {
     if (token) {
       setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+      deleteToken();
     }
   }, [token]);
 

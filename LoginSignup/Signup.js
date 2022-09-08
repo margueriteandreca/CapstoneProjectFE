@@ -41,24 +41,25 @@ function Signup() {
 
   return (
     <View
-      style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}
+      style={{
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingTop: 300,
+      }}
     >
-      <Text>Sign up for Vorba</Text>
-
-      <View style={styles.names}>
-        <TextInput
-          style={styles.input}
-          onChangeText={setFirstName}
-          value={firstName}
-          placeholder="First Name"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setLastName}
-          value={lastName}
-          placeholder="Last Name"
-        />
-      </View>
+      <TextInput
+        style={styles.input}
+        onChangeText={setFirstName}
+        value={firstName}
+        placeholder="First Name"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setLastName}
+        value={lastName}
+        placeholder="Last Name"
+      />
 
       <TextInput
         style={styles.input}
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3777f0",
     width: 180,
     height: 40,
-    borderRadius: 5,
+    borderRadius: 20,
     marginBottom: 10,
   },
   signUpText: {
