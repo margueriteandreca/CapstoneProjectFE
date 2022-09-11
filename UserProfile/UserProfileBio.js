@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfilePicture from "../Components/ProfilePicture";
-import Followers from "./Followers";
+import NameAndFollowers from "./Followers";
 
 function UserProfileBio({ userBio, userPosts, isMe }) {
   const { navigate } = useNavigation();
@@ -24,9 +24,22 @@ function UserProfileBio({ userBio, userPosts, isMe }) {
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>
         <ProfilePicture isBig={true} avatar={userBio.avatar} />
-        <Followers posts={userPosts} following={userBio.following} />
+
+        <NameAndFollowers
+          posts={userPosts}
+          following={userBio.following}
+          first_name={userBio.first_name}
+          last_name={userBio.last_name}
+          username={userBio.username}
+        />
       </View>
       <View style={userBioStyles.bioContainer}>
+        <View style={userBioStyles.nameContainer}>
+          <Text style={userBioStyles.nameText}>{`${userBio.first_name} `}</Text>
+          <Text style={userBioStyles.nameText}>{userBio.last_name}</Text>
+          <Text> • </Text>
+          <Text>{`@${userBio.username}`}</Text>
+        </View>
         <View style={userBioStyles.bioInnerContainer}>
           <Text>{`${userBio.bio} •`}</Text>
           <Text>{`${userBio.bio_link}`}</Text>
@@ -83,6 +96,17 @@ const userBioStyles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  nameContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    // backgroundColor: "red",
+    marginBottom: 10,
+  },
+  nameText: {
+    fontWeight: "700",
   },
 });
 

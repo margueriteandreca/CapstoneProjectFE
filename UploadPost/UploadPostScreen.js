@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Button,
   View,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { TokenContext } from "../App";
 
 import TextUpload from "./TextUpload";
 import ImageUpload from "./ImageUpload";
@@ -20,21 +20,49 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 const Tab = createMaterialTopTabNavigator();
 
 function UploadPostScreen() {
-  const [isText, setIsText] = useState(true);
-
-  // const [image, setImage] = useState(null);
+  const [postText, setPostText] = useState(null);
+  const [postImage, setPostImage] = useState(null);
 
   const { navigate } = useNavigation();
+
+  const { token } = useContext(TokenContext);
 
   const handleOpenScheduling = () => {
     navigate("ProfileStack", { screen: "Scheduling" });
   };
 
-  const UploadPost = () => {
-    fetch("")
+  const uploadPost = () => {
+    let body = new FormData();
+    if (postImage) {
+      body.append("image", {
+        uri: postImage,
+        name: "photo.png",
+        filename: "imageName.png",
+        type: "image/png",
+      });
+    }
+    console.log("BODY", body);
+    if (postText) {
+      body.append({ text: postText });
+    }
+    const image = postImage ? { image: postImage } : {};
+    const text = postText ? { text: postText } : {};
+    // const body = { ...image, ...text };
+
+    console.log("!!! NEW POST", body);
+    fetch("http://127.0.0.1:8000/new_post/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        // "Content-Type": "multipart/form-data",
+      },
+      method: "POST",
+      body: JSON.stringify(body),
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        navigate("Home", { screen: "ProfileStack" });
       });
   };
 
@@ -42,18 +70,26 @@ function UploadPostScreen() {
     <View style={uploadStyles.container}>
       <View style={uploadStyles.postContainer}>
         <Tab.Navigator>
-          <Tab.Screen name="Text" component={TextUpload} />
-          <Tab.Screen name="Image" component={ImageUpload} />
+          <Tab.Screen
+            name="Text"
+            component={TextUpload}
+            initialParams={{ setPostText }}
+          />
+          <Tab.Screen
+            name="Image"
+            component={ImageUpload}
+            initialParams={{ setPostImage }}
+          />
         </Tab.Navigator>
       </View>
 
       <View style={uploadStyles.schedulingContainer}>
         <View style={uploadStyles.uploadNow}>
           <TouchableOpacity>
-            <Text>Cancel</Text>
+            <Text style={uploadStyles.cancelText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Share</Text>
+          <TouchableOpacity onPress={uploadPost}>
+            <Text style={uploadStyles.shareText}>Share</Text>
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center" }}>
@@ -75,24 +111,34 @@ function UploadPostScreen() {
 const uploadStyles = StyleSheet.create({
   container: {
     display: "flex",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   postContainer: {
     backgroundColor: "purple",
     display: "flex",
-    height: 400,
+    height: 420,
     width: "100%",
   },
   uploadNow: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "60%",
+    marginBottom: 60,
+    // marginTop: 10,
+    width: "80%",
+  },
+  cancelText: {
+    fontWeight: "500",
+  },
+  shareText: {
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#3777f0",
   },
   schedulingContainer: {
     display: "flex",
-    height: "40%",
-    justifyContent: "space-evenly",
+    height: "45%",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   schedulingText: {

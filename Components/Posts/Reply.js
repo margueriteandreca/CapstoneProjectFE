@@ -7,9 +7,24 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import ProfilePicture from "../ProfilePicture";
 
-function RepliesFull() {
-  return <View> Here is a REPLY</View>;
+function Reply({ reply }) {
+  console.log("SINGLE REPLY", reply);
+  return (
+    <View style={replyStyles.container}>
+      <ProfilePicture avatar={reply.user.avatar} />
+      <Text>{reply.text}</Text>
+    </View>
+  );
 }
 
-export default RepliesFull;
+const replyStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+});
+
+export default Reply;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   View,
@@ -11,9 +11,17 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { launchImageLibrary } from "react-native-image-picker";
+import { useRoute } from "@react-navigation/native";
 
 function ImageUpload() {
   const [image, setImage] = useState(null);
+  const [isShowingPicker, setIsShowingPicker] = useState(true);
+  const { params } = useRoute();
+
+  useEffect(() => {
+    params.setPostImage(image);
+  }, [image]);
+
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -24,37 +32,46 @@ function ImageUpload() {
     });
 
     if (!result.cancelled) {
+      console.log("!!! RESUTL", result);
       setImage(result.uri);
+      setIsShowingPicker(false);
     }
   };
 
+  console.log(image);
+
   return (
     <View style={imageUploadStyles.container}>
-      <TouchableOpacity
-        style={imageUploadStyles.buttonContainer}
-        onPress={pickImage}
-      >
-        <Text style={imageUploadStyles.buttonText}>+</Text>
-      </TouchableOpacity>
-      <Image
-        source={{ uri: image }}
-        style={{
-          width: 200,
-          height: 200,
-          position: "absolute",
-          bottom: "40%",
-        }}
-      />
+      {isShowingPicker ? (
+        <TouchableOpacity
+          style={imageUploadStyles.buttonContainer}
+          onPress={pickImage}
+        >
+          <Text style={imageUploadStyles.buttonText}>+</Text>
+        </TouchableOpacity>
+      ) : (
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: 200,
+            height: 200,
+            position: "absolute",
+            backgroundColor: "red",
+          }}
+        />
+      )}
     </View>
   );
 }
 
 const imageUploadStyles = StyleSheet.create({
   container: {
-    width: 400,
-    height: 500,
+    width: "100%",
+    height: 420,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor: "black",
+    // opacity: 0.2,
   },
   buttonContainer: {
     display: "flex",

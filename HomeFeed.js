@@ -34,7 +34,7 @@ function HomeFeed() {
       data={feedPhotos}
       renderItem={({ item }) => (
         <View style={{ height: 600, width: "100%" }}>
-          <PostCardFull key={item.id} item={item} />
+          <PostCardFull key={item.id} post={item} />
         </View>
       )}
     />

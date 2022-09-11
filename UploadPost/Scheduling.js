@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import { useState, useMemo } from "react";
 import Clock from "./Clock";
+import PostPreview from "../Components/Posts/PostPreview";
 
 function Scheduling() {
   return (
     <View style={schedulingStyles.container}>
       <View style={schedulingStyles.postContainer}>
-        <Text>Here is preview </Text>
+        <PostPreview />
       </View>
       <View style={schedulingStyles.dateTimeContainer}>
         <Clock />
@@ -34,14 +35,14 @@ const schedulingStyles = StyleSheet.create({
   },
   postContainer: {
     display: "flex",
-    height: 300,
+    height: 250,
     width: "100%",
-    backgroundColor: "aqua",
+    // backgroundColor: "aqua",
   },
   dateTimeContainer: {
-    height: 200,
+    height: 350,
     width: "100%",
-    backgroundColor: "green",
+    // backgroundColor: "green",
   },
   saveButtonContainer: {
     display: "flex",

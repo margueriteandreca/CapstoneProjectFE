@@ -11,13 +11,18 @@ import {
 } from "react-native";
 import PostPreview from "../Components/Posts/PostPreview";
 
-function UserProfileFeed({ userFeed }) {
+function UserProfileFeed({ userFeed, user }) {
   return (
     <View style={userFeedStyles.container}>
       <FlatList
         data={userFeed}
         renderItem={({ item }) => (
-          <PostPreview key={item} isScheduling={false} post={item} />
+          <PostPreview
+            key={item}
+            isScheduling={false}
+            post={item}
+            user={user}
+          />
         )}
         numColumns={3}
       />

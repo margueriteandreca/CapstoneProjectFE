@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   View,
@@ -11,18 +11,26 @@ import {
 } from "react-native";
 
 import { TextInput } from "react-native-gesture-handler";
+import { useRoute } from "@react-navigation/native";
 
 function TextUpload() {
-  const [textPost, setTextPost] = useState("");
+  const [text, setText] = useState("");
+  const { params } = useRoute();
+
+  useEffect(() => {
+    params.setPostText(text);
+  }, [text]);
+
   return (
     <View style={textPostStyles.container}>
       <Text style={textPostStyles.text}>Compose a kint</Text>
       <TextInput
         style={textPostStyles.input}
-        onChangeText={setTextPost}
-        value={textPost}
+        onChangeText={setText}
+        value={text}
         multiline={true}
         numberOfLines={4}
+        maxLength={255}
         placeholder="tell kinta what's wrong bb "
         autoCapitalize="none"
       />
@@ -32,6 +40,7 @@ function TextUpload() {
 
 const textPostStyles = StyleSheet.create({
   container: {
+    marginTop: 15,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -40,14 +49,14 @@ const textPostStyles = StyleSheet.create({
     marginLeft: 5,
   },
   input: {
-    height: "70%",
-    width: "70%",
+    height: "90%",
+    width: "100%",
     backgroundColor: "white",
     borderColor: "grey",
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 20,
-    fontSize: 16,
+    // borderRadius: 10,
+    padding: 30,
+    fontSize: 18,
     fontWeight: "500",
     marginTop: 10,
   },

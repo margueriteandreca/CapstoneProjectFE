@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Button,
   View,
@@ -12,17 +12,42 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import ProfilePicture from "../Components/ProfilePicture";
+import { TokenContext } from "../App";
 
 ///MUST ADD GOBACK
 
 function EditProfile({ route, navigation }) {
+  const { token } = useContext(TokenContext);
+
   const { userBio } = route.params;
   console.log(userBio);
+
+  const [firstName, setFirstName] = useState(userBio.first_name);
+  const [lastName, setLastName] = useState(userBio.last_name);
+  const [bio, setBio] = useState(userBio.bio);
+  const [bioLink, setBioLink] = useState(userBio.bio_link);
 
   const [image, setImage] = useState(userBio.avatar);
 
   const handleUpdateBio = () => {
-    fetch().then().then();
+    fetch("http://127.0.0.1:8000/profile/edit/", {
+      method: "PATCH",
+      body: JSON.stringify({
+        first_name: firstName,
+        last_name: lastName,
+        bio,
+        bio_link: bioLink,
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("profile patch:", data);
+      })
+      .catch((e) => console.log("patch error:", e));
   };
 
   const pickImage = async () => {
@@ -53,6 +78,8 @@ function EditProfile({ route, navigation }) {
           <TextInput
             placeholder="First Name"
             defaultValue={userBio.first_name}
+            value={firstName}
+            onChangeText={setFirstName}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -61,6 +88,8 @@ function EditProfile({ route, navigation }) {
           <TextInput
             placeholder="Last Name"
             defaultValue={userBio.last_name}
+            value={lastName}
+            onChangeText={setLastName}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -69,6 +98,8 @@ function EditProfile({ route, navigation }) {
           <TextInput
             placeholder="Bio"
             defaultValue={userBio.bio}
+            value={bio}
+            onChangeText={setBio}
             style={editProfileStyles.inputContainer}
           />
         </View>
@@ -77,10 +108,18 @@ function EditProfile({ route, navigation }) {
           <TextInput
             placeholder="insert link"
             defaultValue={userBio.bio_link}
+            value={bioLink}
+            onChangeText={setBioLink}
             style={editProfileStyles.inputContainer}
           />
         </View>
       </View>
+      <TouchableOpacity
+        onPress={handleUpdateBio}
+        style={editProfileStyles.saveContainer}
+      >
+        <Text style={editProfileStyles.saveText}>Save changes</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -119,6 +158,20 @@ const editProfileStyles = StyleSheet.create({
     height: 50,
     width: 250,
     // backgroundColor: "red",
+  },
+  saveContainer: {
+    marginTop: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "70%",
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: "indigo",
+  },
+  saveText: {
+    color: "white",
+    fontSize: 16,
   },
 });
 

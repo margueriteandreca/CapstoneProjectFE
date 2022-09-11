@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Button,
   View,
@@ -9,31 +10,99 @@ import {
 } from "react-native";
 import ProfilePicture from "../ProfilePicture";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+import DeletePost from "./DeletePost";
+import { UserContext, TokenContext } from "../../App";
 
-function PostCardFull({ item }) {
-  const { text, images, like_count, user } = item;
+function PostCardFull({ post, modalVisible, setModalVisible }) {
+  const { text, images, like_count, user: postUser, replies, likes } = post;
+
+  const [likeCount, setLikeCount] = useState(like_count);
+  const { navigate } = useNavigation();
+  const { params } = useRoute();
+
+  const { token } = useContext(TokenContext);
+  // loggedInUser is alias for user, had to be called a new name in this destructure
+  // not to conflict with user destructured from post
+  const { user: loggedInUser } = useContext(UserContext);
+  const isMyPost = loggedInUser.id === postUser.id;
+
+  const [myLike, setMyLike] = useState(
+    likes.find((like) => like.user === loggedInUser.id)
+  );
+
+  console.log("!!! LIKES", likes);
+  // Post will have likes
+  // Likes will have a user id
+  // If one of those like user ids matches logged in user
+  // set the default isLiked to true
+  // store that like id in a state to be referenced on unlike
+
+  console.log("!!!!!!!!", post);
+  console.log("REPLIES", replies);
 
   function handleOnLike() {
-    fetch("", {
-      method: "PATCH",
+    fetch("http://127.0.0.1:8000/like/", {
+      method: "POST",
       body: JSON.stringify({
-        title: "foo",
+        post: post.id,
       }),
       headers: {
-        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        setMyLike(data);
       });
+    setLikeCount((likeCount) => likeCount + 1);
   }
+
+  function handleUnLike() {
+    fetch(`http://127.0.0.1:8000/like/${myLike.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+    setMyLike(null);
+    setLikeCount((likeCount) => likeCount - 1);
+  }
+
+  const deletePost = () => {
+    fetch(`http://127.0.0.1:8000/post/${post.id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
+
+  const handleViewAllReplies = () => {
+    navigate("RepliesFull", {
+      replies,
+    });
+  };
 
   return (
     <View style={postCardFullStyles.outerContainer}>
-      <View style={postCardFullStyles.userContainer}>
-        <ProfilePicture avatar={user.avatar} />
-        <Text style={postCardFullStyles.username}>{`@${user.username}`}</Text>
+      <View style={postCardFullStyles.headerContainer}>
+        <View style={postCardFullStyles.userContainer}>
+          <ProfilePicture avatar={postUser.avatar} />
+          <Text
+            style={postCardFullStyles.username}
+          >{`@${postUser.username}`}</Text>
+        </View>
+        {isMyPost && (
+          <DeletePost
+            deletePost={deletePost}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+          />
+        )}
       </View>
       <View style={postCardFullStyles.innerContainer}>
         {images[0] ? (
@@ -43,25 +112,60 @@ function PostCardFull({ item }) {
           />
         ) : (
           <View style={postCardFullStyles.textContainer}>
-            <Text style={postCardFullStyles.text}>{item ? text : null}</Text>
+            <Text style={postCardFullStyles.text}>{post ? text : null}</Text>
           </View>
         )}
       </View>
       <View style={postCardFullStyles.likesRepliesContainer}>
-        <FontAwesome name="heart-o" size={24} color="black" />
-        {/* <FontAwesome name="heart" size={24} color="red" /> */}
+        {myLike ? (
+          <TouchableOpacity onPress={handleUnLike}>
+            <FontAwesome name="heart" size={24} color="red" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={handleOnLike}>
+            <FontAwesome name="heart-o" size={24} color="black" />
+          </TouchableOpacity>
+        )}
+
         <FontAwesome name="comment-o" size={24} color="black" />
       </View>
+
       <View style={postCardFullStyles.likesContainer}>
         <Text>
-          {`${like_count}`} {like_count === 1 ? `like` : `likes`}
+          {`${likeCount}`} {likeCount === 1 ? `like` : `likes`}
         </Text>
       </View>
 
       <View style={postCardFullStyles.repliesContainer}>
-        <Text>Comments go here</Text>
-        <Text>Comments go here</Text>
-        <Text>Comments go here</Text>
+        <View style={postCardFullStyles.replyPreview}>
+          <Text style={postCardFullStyles.usernameText}>
+            {replies &&
+              replies[replies.length - 1] &&
+              replies[replies.length - 1].user.username}
+            {"  "}
+          </Text>
+          <Text>
+            {replies &&
+              replies[replies.length - 1] &&
+              replies[replies.length - 1].text}
+          </Text>
+        </View>
+        <View style={postCardFullStyles.replyPreview}>
+          <Text style={postCardFullStyles.usernameText}>
+            {replies &&
+              replies[replies.length - 2] &&
+              replies[replies.length - 2].user.username}
+            {"  "}
+          </Text>
+          <Text>
+            {replies &&
+              replies[replies.length - 2] &&
+              replies[replies.length - 2].text}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={handleViewAllReplies}>
+          <Text>View all replies</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -125,7 +229,19 @@ const postCardFullStyles = StyleSheet.create({
     marginLeft: 10,
     width: "100%",
     height: 90,
-    // backgroundColor: "aqua",
+  },
+  replyPreview: {
+    width: "100%",
+    direction: "flex",
+    flexDirection: "row",
+  },
+  usernameText: {
+    fontWeight: "700",
+  },
+  headerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 export default PostCardFull;

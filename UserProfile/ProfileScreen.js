@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Button, View, Text, TouchableOpacity, Image } from "react-native";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import * as SecureStore from "expo-secure-store";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -17,7 +17,7 @@ function ProfileScreen() {
   const [userProfile, setUserProfile] = useState({});
   const { token } = useContext(TokenContext);
 
-  useEffect(() => {
+  const fetchProfile = useCallback(() => {
     fetch(`http://127.0.0.1:8000/profile/`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -30,6 +30,12 @@ function ProfileScreen() {
       });
   }, []);
 
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useFocusEffect(fetchProfile);
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {userProfile.user && (
@@ -39,7 +45,9 @@ function ProfileScreen() {
           isMe={true}
         />
       )}
-      {userProfile.posts && <UserProfileFeed userFeed={userProfile.posts} />}
+      {userProfile.posts && (
+        <UserProfileFeed userFeed={userProfile.posts} user={userProfile.user} />
+      )}
     </View>
   );
 }

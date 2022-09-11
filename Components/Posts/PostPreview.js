@@ -10,11 +10,16 @@ import {
   Animated,
 } from "react-native";
 
-function PostPreview({ isScheduling, post }) {
+function PostPreview({ isScheduling, post, user }) {
   const { navigate } = useNavigation();
 
   const handleOpenPost = () => {
-    navigate("PostCardFull");
+    navigate("PostCardFullScreen", {
+      post: {
+        ...post,
+        user,
+      },
+    });
   };
 
   const handleOpenScheduling = () => {

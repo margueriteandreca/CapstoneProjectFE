@@ -22,7 +22,10 @@ import Scheduling from "./UploadPost/Scheduling";
 import EditProfile from "./UserProfile/EditProfile";
 import LoginSignUp from "./LoginSignup/LoginSignUp";
 import ProfileScreen from "./UserProfile/ProfileScreen";
+import Header from "./Header";
 import LogoutFooter from "./LogoutFooter";
+import RepliesFull from "./Components/Posts/RepliesFull";
+import PostCardFullScreen from "./Components/Posts/PostCardFullScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,6 +35,8 @@ export const TokenContext = createContext({
   token: null,
   setToken: () => {},
 });
+
+export const UserContext = createContext({});
 
 const screenOptions = ({ route }) => ({
   // THESE ARE THE CONFIGS OF HOW BOTTOM TABS SHOW
@@ -62,6 +67,11 @@ function HomeStack() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="RepliesFull"
+        component={RepliesFull}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -87,6 +97,16 @@ function ProfileStack() {
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RepliesFull"
+        component={RepliesFull}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PostCardFullScreen"
+        component={PostCardFullScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -116,6 +136,7 @@ const CustomDrawer = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>
       <DrawerContentScrollView {...props}>
+        <Header />
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <LogoutFooter />
@@ -188,6 +209,7 @@ const deleteToken = async () => {
 
 function App() {
   const [token, setToken] = useState(null);
+  const [userProfile, setUserProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -203,8 +225,17 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      setIsLoggedIn(true);
-    } else {
+      fetch(`http://127.0.0.1:8000/profile/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserProfile(data);
+          setIsLoggedIn(true);
+        });
+    } else if (!token && !isLoading) {
       setIsLoggedIn(false);
       deleteToken();
     }
@@ -212,23 +243,25 @@ function App() {
 
   return (
     <TokenContext.Provider value={tokenValue}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {isLoggedIn ? (
-            <Stack.Screen
-              name="LoggedIn"
-              component={LoggedInNavigator}
-              options={{ headerShown: false }}
-            />
-          ) : (
-            <Stack.Screen
-              name="LoggedOut"
-              component={LoggedOutNavigator}
-              options={{ headerShown: false }}
-            />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserContext.Provider value={userProfile}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {isLoggedIn ? (
+              <Stack.Screen
+                name="LoggedIn"
+                component={LoggedInNavigator}
+                options={{ headerShown: false }}
+              />
+            ) : (
+              <Stack.Screen
+                name="LoggedOut"
+                component={LoggedOutNavigator}
+                options={{ headerShown: false }}
+              />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserContext.Provider>
     </TokenContext.Provider>
   );
 }
