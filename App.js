@@ -26,6 +26,7 @@ import Header from "./Header";
 import LogoutFooter from "./LogoutFooter";
 import RepliesFull from "./Components/Posts/RepliesFull";
 import PostCardFullScreen from "./Components/Posts/PostCardFullScreen";
+import Drafts from "./Drafts";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -153,6 +154,7 @@ function LoggedInNavigator() {
     >
       <Drawer.Screen name="Home" component={BottomTabs} />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
+      <Drawer.Screen name="Drafts" component={Drafts} />
       <Drawer.Screen name="New Post" component={UploadPostScreen} />
     </Drawer.Navigator>
   );
@@ -224,6 +226,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log(isLoading);
     if (token) {
       fetch(`http://127.0.0.1:8000/profile/`, {
         headers: {
@@ -232,6 +235,7 @@ function App() {
       })
         .then((res) => res.json())
         .then((data) => {
+          setIsLoading(false);
           setUserProfile(data);
           setIsLoggedIn(true);
         });

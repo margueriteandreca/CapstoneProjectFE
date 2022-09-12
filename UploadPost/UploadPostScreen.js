@@ -10,6 +10,8 @@ import {
   FlatList,
 } from "react-native";
 import { TokenContext } from "../App";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import TextUpload from "./TextUpload";
 import ImageUpload from "./ImageUpload";
@@ -22,32 +24,53 @@ const Tab = createMaterialTopTabNavigator();
 function UploadPostScreen() {
   const [postText, setPostText] = useState(null);
   const [postImage, setPostImage] = useState(null);
+  const [date, setDate] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { navigate } = useNavigation();
 
   const { token } = useContext(TokenContext);
 
+  const showDatePicker = () => {
+    setIsOpen(true);
+  };
+
+  const hideDatePicker = () => {
+    setIsOpen(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.log("A date has been picked: ", date);
+    setDate(date);
+    hideDatePicker();
+  };
+
   const handleOpenScheduling = () => {
     navigate("ProfileStack", { screen: "Scheduling" });
   };
 
-  const uploadPost = () => {
-    let body = new FormData();
-    if (postImage) {
-      body.append("image", {
-        uri: postImage,
-        name: "photo.png",
-        filename: "imageName.png",
-        type: "image/png",
-      });
-    }
-    console.log("BODY", body);
-    if (postText) {
-      body.append({ text: postText });
-    }
+  const handleSaveDraft = () => {
+    uploadPost(true);
+  };
+
+  const uploadPost = (isDraft = false) => {
+    // let body = new FormData();
+    // if (postImage) {
+    //   body.append("image", {
+    //     uri: postImage,
+    //     name: "photo.png",
+    //     filename: "imageName.png",
+    //     type: "image/png",
+    //   });
+    // }
+    // console.log("BODY", body);
+    // if (postText) {
+    //   body.append({ text: postText });
+    // }
+
     const image = postImage ? { image: postImage } : {};
     const text = postText ? { text: postText } : {};
-    // const body = { ...image, ...text };
+    const body = { ...image, ...text, is_draft: isDraft };
 
     console.log("!!! NEW POST", body);
     fetch("http://127.0.0.1:8000/new_post/", {
@@ -62,7 +85,11 @@ function UploadPostScreen() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        navigate("Home", { screen: "ProfileStack" });
+        if (isDraft) {
+          navigate("Drafts");
+        } else {
+          navigate("Home", { screen: "ProfileStack" });
+        }
       });
   };
 
@@ -94,16 +121,24 @@ function UploadPostScreen() {
         </View>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
-            onPress={handleOpenScheduling}
+            onPress={showDatePicker}
             style={uploadStyles.buttonContainer}
           >
             <Text style={uploadStyles.schedulingText}> Schedule Post</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleOpenScheduling}>
+
+          <TouchableOpacity onPress={handleSaveDraft}>
             <Text style={uploadStyles.draftsText}> Save to drafts</Text>
           </TouchableOpacity>
         </View>
       </View>
+      <DateTimePickerModal
+        isVisible={isOpen}
+        mode="datetime"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        minimumDate={new Date()}
+      />
     </View>
   );
 }

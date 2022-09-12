@@ -12,7 +12,6 @@ import {
   Pressable,
 } from "react-native";
 import PostCardFull from "./PostCardFull";
-// import BottomSheet from "@gorhom/bottom-sheet";
 
 function PostCardFullScreen() {
   const [modalVisible, setModalVisible] = useState(false);

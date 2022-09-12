@@ -164,7 +164,7 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
           </Text>
         </View>
         <TouchableOpacity onPress={handleViewAllReplies}>
-          <Text>View all replies</Text>
+          {replies.length > 2 && <Text>View all replies</Text>}
         </TouchableOpacity>
       </View>
     </View>

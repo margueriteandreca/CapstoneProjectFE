@@ -40,64 +40,81 @@ function Signup() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        paddingTop: 300,
-      }}
-    >
-      <TextInput
-        style={styles.input}
-        onChangeText={setFirstName}
-        value={firstName}
-        placeholder="First Name"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setLastName}
-        value={lastName}
-        placeholder="Last Name"
-      />
+    <View style={{ display: "flex", width: "100%" }}>
+      <View style={styles.nameContainer}>
+        <TextInput
+          style={styles.nameInput}
+          onChangeText={setFirstName}
+          value={firstName}
+          placeholder="First Name"
+        />
+        <TextInput
+          style={styles.nameInput}
+          onChangeText={setLastName}
+          value={lastName}
+          placeholder="Last Name"
+        />
+      </View>
 
-      <TextInput
-        style={styles.input}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="username"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="password"
-        secureTextEntry
-      />
-
-      <TouchableOpacity
-        style={styles.signUpButton}
-        onPress={handleSignUp}
-        underlayColor="#fff"
+      <View
+        style={{
+          width: "100%",
+          alignItems: "center",
+        }}
       >
-        <Text style={styles.signUpText}>Create Account</Text>
-      </TouchableOpacity>
-      {/* <Text style={styles.text} onPress={handleBackToLogin}>
-        Back to Login
-      </Text> */}
+        <TextInput
+          style={styles.input}
+          onChangeText={setUsername}
+          value={username}
+          placeholder="username"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="password"
+          secureTextEntry
+        />
+
+        <TouchableOpacity
+          style={styles.signUpButton}
+          onPress={handleSignUp}
+          underlayColor="#fff"
+        >
+          <Text style={styles.signUpText}>Create Account</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
+    height: 50,
     margin: 12,
     borderWidth: 1,
-    padding: 10,
-    width: 180,
-    borderRadius: 5,
+    padding: 15,
+    width: "90%",
+    borderRadius: 25,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+  },
+  nameInput: {
+    height: 50,
+    margin: 5,
+    borderWidth: 1,
+    padding: 15,
+    width: 170,
+    borderRadius: 25,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+  },
+  nameContainer: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    // backgroundColor: "aqua",
+    marginRight: 50,
   },
   text: {
     color: "#3777f0",
@@ -107,9 +124,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#3777f0",
-    width: 180,
-    height: 40,
-    borderRadius: 20,
+    width: "90%",
+    height: 50,
+    borderRadius: 25,
     marginBottom: 10,
   },
   signUpText: {
