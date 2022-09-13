@@ -31,9 +31,16 @@ function PostPreview({ isScheduling, post, user }) {
       onPress={isScheduling ? handleOpenScheduling : handleOpenPost}
       style={postPreviewStyles.container}
     >
-      <View style={postPreviewStyles.textContainer}>
-        <Text>{post ? post.text : null}</Text>
-      </View>
+      {post.images[0] ? (
+        <Image
+          source={{ uri: `http://127.0.0.1:8000/${post.images[0].image}` }}
+          style={postPreviewStyles.image}
+        />
+      ) : (
+        <View style={postPreviewStyles.textContainer}>
+          <Text>{post ? post.text : null}</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -54,6 +61,10 @@ const postPreviewStyles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
 });
 

@@ -98,7 +98,7 @@ function LoginSignUp() {
             <Ellipse cx={width / 2} rx={height} ry={height + 100} />
           </ClipPath>
           <Image
-            href={require("../assets/login-background.jpg")}
+            href={require("../assets/gradient-purple.png")}
             width={width + 100}
             height={height + 100}
             preserveAspectRatio="xMidyMid slice"
@@ -140,7 +140,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   button: {
-    backgroundColor: "rgba(123,104,238,0.8)",
+    // backgroundColor: "rgba(123,104,238,0.8)",
+    backgroundColor: "#4A4199",
+    opacity: 0.8,
     height: 55,
     alignItems: "center",
     justifyContent: "center",

@@ -94,6 +94,8 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)",
     marginHorizontal: 20,
     marginVertical: 10,
+    fontSize: 16,
+    fontWeight: "500",
   },
   //     height: 50,
   //     borderWidth: 1,
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#3777f0",
+    backgroundColor: "#4A4199",
     width: "90%",
     height: 50,
     borderRadius: 25,
@@ -122,6 +124,8 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: "white",
+    fontWeight: "700",
+    fontSize: 18,
   },
   signUpButtonContainer: {
     marginTop: 10,

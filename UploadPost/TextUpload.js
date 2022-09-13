@@ -23,7 +23,7 @@ function TextUpload() {
 
   return (
     <View style={textPostStyles.container}>
-      <Text style={textPostStyles.text}>Compose a kint</Text>
+      <Text style={textPostStyles.text}>Create a text post</Text>
       <TextInput
         style={textPostStyles.input}
         onChangeText={setText}
@@ -31,7 +31,7 @@ function TextUpload() {
         multiline={true}
         numberOfLines={4}
         maxLength={255}
-        placeholder="tell kinta what's wrong bb "
+        placeholder="What's happening?"
         autoCapitalize="none"
       />
     </View>
@@ -47,15 +47,19 @@ const textPostStyles = StyleSheet.create({
   },
   text: {
     marginLeft: 5,
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#3777f0",
   },
   input: {
     height: "90%",
     width: "100%",
     backgroundColor: "white",
-    borderColor: "grey",
+    borderColor: "rgba(0, 0, 0, 0.2)",
     borderWidth: 1,
     // borderRadius: 10,
     padding: 30,
+    paddingTop: 20,
     fontSize: 18,
     fontWeight: "500",
     marginTop: 10,

@@ -59,7 +59,9 @@ function Signup() {
       <View
         style={{
           width: "100%",
+          display: "flex",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <TextInput
@@ -82,7 +84,7 @@ function Signup() {
           onPress={handleSignUp}
           underlayColor="#fff"
         >
-          <Text style={styles.signUpText}>Create Account</Text>
+          <Text style={styles.signUpText}>Create account</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -92,21 +94,26 @@ function Signup() {
 const styles = StyleSheet.create({
   input: {
     height: 50,
-    margin: 12,
+    marginBottom: 10,
     borderWidth: 1,
     padding: 15,
     width: "90%",
     borderRadius: 25,
     borderColor: "rgba(0, 0, 0, 0.2)",
+    fontSize: 16,
+    fontWeight: "500",
   },
   nameInput: {
     height: 50,
     margin: 5,
+    marginBottom: 10,
     borderWidth: 1,
     padding: 15,
     width: 170,
     borderRadius: 25,
     borderColor: "rgba(0, 0, 0, 0.2)",
+    fontSize: 16,
+    fontWeight: "500",
   },
   nameContainer: {
     display: "flex",
@@ -123,7 +130,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#3777f0",
+    backgroundColor: "#4A4199",
     width: "90%",
     height: 50,
     borderRadius: 25,
@@ -131,6 +138,8 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: "white",
+    fontWeight: "700",
+    fontSize: 18,
   },
 });
 

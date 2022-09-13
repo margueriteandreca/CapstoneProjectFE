@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Button,
   View,
@@ -9,26 +9,74 @@ import {
   FlatList,
 } from "react-native";
 import Reply from "./Reply";
+import ReplyKeyboard from "./ReplyKeyboard";
+import { useState, useEffect } from "react";
+
+import { TokenContext } from "../../App";
 
 function RepliesFull({ route }) {
-  const dummy = [1, 2, 3, 4];
+  const [reply, setReply] = useState("");
 
-  const { replies } = route.params;
+  const { replies, post } = route.params;
 
-  console.log(replies);
+  console.log(`!!!!!!!!RP`, replies, post);
+
+  const { token } = useContext(TokenContext);
+
+  const handlePostReply = () => {
+    fetch("http://127.0.0.1:8000/reply/", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      method: "POST",
+      body: JSON.stringify({
+        text: reply,
+        post: post.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {});
+  };
 
   return (
-    <View>
+    <View style={repliesFullStyles.container}>
       <FlatList
         data={replies}
         renderItem={({ item }) => (
-          <View style={{ height: 80, width: "100%" }}>
+          <View style={{ width: "100%" }}>
             <Reply key={item.id} reply={item} />
           </View>
         )}
       />
+      <View style={repliesFullStyles.keyboard}>
+        <ReplyKeyboard
+          handlePostReply={handlePostReply}
+          reply={reply}
+          setReply={setReply}
+        />
+      </View>
     </View>
   );
 }
+
+const repliesFullStyles = StyleSheet.create({
+  container: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    justifyContent: "space-between",
+  },
+  keyboard: {
+    // marginBottom: 5,
+    backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
+    height: 65,
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+  },
+});
 
 export default RepliesFull;

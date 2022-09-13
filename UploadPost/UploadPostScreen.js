@@ -54,43 +54,40 @@ function UploadPostScreen() {
   };
 
   const uploadPost = (isDraft = false) => {
-    // let body = new FormData();
-    // if (postImage) {
-    //   body.append("image", {
-    //     uri: postImage,
-    //     name: "photo.png",
-    //     filename: "imageName.png",
-    //     type: "image/png",
-    //   });
-    // }
-    // console.log("BODY", body);
-    // if (postText) {
-    //   body.append({ text: postText });
-    // }
+    let body = {};
+    if (postImage) {
+      console.log("!!! IMAGE", postImage.base64);
+      body.image = postImage.base64;
+    }
+    if (postText) {
+      body.text = postText;
+    }
+    if (isDraft) {
+      body.is_draft = true;
+    }
 
-    const image = postImage ? { image: postImage } : {};
-    const text = postText ? { text: postText } : {};
-    const body = { ...image, ...text, is_draft: isDraft };
-
-    console.log("!!! NEW POST", body);
+    // const image = postImage ? { image: postImage } : {};
+    // const text = postText ? { text: postText } : {};
+    // const body = { ...image, ...text, is_draft: isDraft };
     fetch("http://127.0.0.1:8000/new_post/", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        // "Content-Type": "multipart/form-data",
+        // "Content-Type":
+        //   "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
       },
       method: "POST",
       body: JSON.stringify(body),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (isDraft) {
           navigate("Drafts");
         } else {
           navigate("Home", { screen: "ProfileStack" });
         }
-      });
+      })
+      .catch((e) => console.log("!!! POST ERROR", e));
   };
 
   return (
@@ -113,22 +110,24 @@ function UploadPostScreen() {
       <View style={uploadStyles.schedulingContainer}>
         <View style={uploadStyles.uploadNow}>
           <TouchableOpacity>
-            <Text style={uploadStyles.cancelText}>Cancel</Text>
+            <Text style={uploadStyles.draftsText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={uploadPost}>
-            <Text style={uploadStyles.shareText}>Share</Text>
+          <TouchableOpacity onPress={handleSaveDraft}>
+            <Text style={uploadStyles.draftsText}> Save to drafts</Text>
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
+            style={uploadStyles.buttonContainer}
+            onPress={() => uploadPost()}
+          >
+            <Text style={uploadStyles.schedulingText}>Share now</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={showDatePicker}
             style={uploadStyles.buttonContainer}
           >
-            <Text style={uploadStyles.schedulingText}> Schedule Post</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={handleSaveDraft}>
-            <Text style={uploadStyles.draftsText}> Save to drafts</Text>
+            <Text style={uploadStyles.schedulingText}> Schedule post</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -151,7 +150,7 @@ const uploadStyles = StyleSheet.create({
   postContainer: {
     backgroundColor: "purple",
     display: "flex",
-    height: 420,
+    height: 480,
     width: "100%",
   },
   uploadNow: {
@@ -187,13 +186,14 @@ const uploadStyles = StyleSheet.create({
     alignItems: "center",
     width: 220,
     height: 50,
-    borderRadius: 10,
+    borderRadius: 25,
     backgroundColor: "#3777f0",
     marginBottom: 10,
   },
   draftsText: {
-    fontSize: 14,
-    color: "#8367d6",
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#3777f0",
   },
 });
 

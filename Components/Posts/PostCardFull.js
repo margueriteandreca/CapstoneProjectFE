@@ -84,6 +84,13 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
   const handleViewAllReplies = () => {
     navigate("RepliesFull", {
       replies,
+      post,
+    });
+  };
+
+  const navigateToUserProfile = () => {
+    navigate("ProfileSreen", {
+      user,
     });
   };
 
@@ -92,9 +99,11 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
       <View style={postCardFullStyles.headerContainer}>
         <View style={postCardFullStyles.userContainer}>
           <ProfilePicture avatar={postUser.avatar} />
-          <Text
-            style={postCardFullStyles.username}
-          >{`@${postUser.username}`}</Text>
+          <TouchableOpacity onPress={navigateToUserProfile}>
+            <Text
+              style={postCardFullStyles.username}
+            >{`@${postUser.username}`}</Text>
+          </TouchableOpacity>
         </View>
         {isMyPost && (
           <DeletePost
@@ -126,8 +135,9 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
             <FontAwesome name="heart-o" size={24} color="black" />
           </TouchableOpacity>
         )}
-
-        <FontAwesome name="comment-o" size={24} color="black" />
+        <TouchableOpacity onPress={handleViewAllReplies}>
+          <FontAwesome name="reply" size={24} color="black" />
+        </TouchableOpacity>
       </View>
 
       <View style={postCardFullStyles.likesContainer}>
@@ -164,7 +174,9 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
           </Text>
         </View>
         <TouchableOpacity onPress={handleViewAllReplies}>
-          {replies.length > 2 && <Text>View all replies</Text>}
+          {replies && replies.length > 2 && (
+            <Text style={postCardFullStyles.viewAllText}>View all replies</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -234,6 +246,7 @@ const postCardFullStyles = StyleSheet.create({
     width: "100%",
     direction: "flex",
     flexDirection: "row",
+    marginBottom: 2,
   },
   usernameText: {
     fontWeight: "700",
@@ -242,6 +255,10 @@ const postCardFullStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  viewAllText: {
+    opacity: 0.8,
+    marginTop: 2,
   },
 });
 export default PostCardFull;
