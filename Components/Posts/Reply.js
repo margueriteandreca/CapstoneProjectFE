@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ProfilePicture from "../ProfilePicture";
 import { useState, useEffect } from "react";
-import { UserContext } from "../../App";
+import { UserContext } from "../../Context";
 
 function Reply({ reply }) {
   console.log("SINGLE REPLY", reply);

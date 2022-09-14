@@ -8,9 +8,9 @@ import {
   Image,
   StyleSheet,
   FlatList,
+  Modal,
 } from "react-native";
-import { TokenContext } from "../App";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { TokenContext } from "../Context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import TextUpload from "./TextUpload";
@@ -26,6 +26,7 @@ function UploadPostScreen() {
   const [postImage, setPostImage] = useState(null);
   const [date, setDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { navigate } = useNavigation();
 
@@ -43,6 +44,9 @@ function UploadPostScreen() {
     console.log("A date has been picked: ", date);
     setDate(date);
     hideDatePicker();
+    setTimeout(() => {
+      setModalVisible(true);
+    }, 800);
   };
 
   const handleOpenScheduling = () => {
@@ -65,16 +69,14 @@ function UploadPostScreen() {
     if (isDraft) {
       body.is_draft = true;
     }
+    if (date) {
+      body.publication_datetime = date;
+    }
 
-    // const image = postImage ? { image: postImage } : {};
-    // const text = postText ? { text: postText } : {};
-    // const body = { ...image, ...text, is_draft: isDraft };
     fetch("http://127.0.0.1:8000/new_post/", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        // "Content-Type":
-        //   "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
       },
       method: "POST",
       body: JSON.stringify(body),
@@ -109,10 +111,13 @@ function UploadPostScreen() {
 
       <View style={uploadStyles.schedulingContainer}>
         <View style={uploadStyles.uploadNow}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <Text style={uploadStyles.draftsText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSaveDraft}>
+          <TouchableOpacity
+            onPress={handleSaveDraft}
+            disabled={!postImage && !postText}
+          >
             <Text style={uploadStyles.draftsText}> Save to drafts</Text>
           </TouchableOpacity>
         </View>
@@ -120,6 +125,7 @@ function UploadPostScreen() {
           <TouchableOpacity
             style={uploadStyles.buttonContainer}
             onPress={() => uploadPost()}
+            disabled={!postImage && !postText}
           >
             <Text style={uploadStyles.schedulingText}>Share now</Text>
           </TouchableOpacity>
@@ -127,7 +133,15 @@ function UploadPostScreen() {
             onPress={showDatePicker}
             style={uploadStyles.buttonContainer}
           >
-            <Text style={uploadStyles.schedulingText}> Schedule post</Text>
+            <Text style={uploadStyles.schedulingText}>Schedule post</Text>
+          </TouchableOpacity>
+          {date && (
+            <Text>
+              {date.toLocaleDateString()} {date.toLocaleTimeString()}
+            </Text>
+          )}
+          <TouchableOpacity>
+            <Text style={{ color: "green", fontWeight: "500" }}>Confirm</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -138,6 +152,25 @@ function UploadPostScreen() {
         onCancel={hideDatePicker}
         minimumDate={new Date()}
       />
+      {/* <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {}}
+      >
+        <View style={uploadStyles.modal}>
+          <Text style={{ color: "white" }}>Your post is scheduled for:</Text>
+          <Text style={{ color: "white" }}>
+            {date &&
+              `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`}
+          </Text>
+          <TouchableOpacity
+            style={{ height: 50, width: 100, backgroundColor: "purple" }}
+          >
+            <Text style={{ color: "white" }}>Confirm</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal> */}
     </View>
   );
 }
@@ -157,7 +190,7 @@ const uploadStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 60,
+    marginBottom: 30,
     // marginTop: 10,
     width: "80%",
   },
@@ -194,6 +227,15 @@ const uploadStyles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 18,
     color: "#3777f0",
+  },
+  modal: {
+    height: 200,
+    width: 300,
+    backgroundColor: "black",
+    opacity: 0.7,
+    borderRadius: 10,
+    marginTop: 300,
+    left: 50,
   },
 });
 

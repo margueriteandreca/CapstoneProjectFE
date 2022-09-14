@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ProfilePicture from "../Components/ProfilePicture";
-import NameAndFollowers from "./Followers";
+import Followers from "./Followers";
 
 function UserProfileBio({ userBio, userPosts, isMe }) {
   const { navigate } = useNavigation();
@@ -25,9 +25,10 @@ function UserProfileBio({ userBio, userPosts, isMe }) {
       <View style={userBioStyles.photoFollowersContainer}>
         <ProfilePicture isBig={true} avatar={userBio.avatar} />
 
-        <NameAndFollowers
+        <Followers
           posts={userPosts}
           following={userBio.following}
+          followers={userBio.followers}
           first_name={userBio.first_name}
           last_name={userBio.last_name}
           username={userBio.username}
@@ -35,8 +36,12 @@ function UserProfileBio({ userBio, userPosts, isMe }) {
       </View>
       <View style={userBioStyles.bioContainer}>
         <View style={userBioStyles.nameContainer}>
-          <Text style={userBioStyles.nameText}>{`${userBio.first_name} `}</Text>
-          <Text style={userBioStyles.nameText}>{userBio.last_name}</Text>
+          <View style={userBioStyles.firstLastContainer}>
+            <Text
+              style={userBioStyles.nameText}
+            >{`${userBio.first_name} `}</Text>
+            <Text style={userBioStyles.nameText}>{userBio.last_name}</Text>
+          </View>
           <Text> • </Text>
           <Text>{`@${userBio.username}`}</Text>
         </View>
@@ -63,15 +68,15 @@ const userBioStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     width: "100%",
-    height: "40%",
+    height: "35%",
     justifyContent: "center",
   },
   buttonContainer: {
-    width: 100,
+    width: 150,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#3777f0",
+    backgroundColor: "#665EC2",
     borderRadius: 10,
   },
   buttonText: {
@@ -86,25 +91,31 @@ const userBioStyles = StyleSheet.create({
   },
   bioContainer: {
     display: "flex",
-    justifyContent: "center",
+    marginTop: 5,
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   bioInnerContainer: {
     // backgroundColor: "aqua",
-    height: 60,
+    // height: 60,
+    marginBottom: 10,
     width: 300,
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   nameContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "80%",
-    // backgroundColor: "red",
+    // width: "80%",
     marginBottom: 10,
   },
+  firstLastContainer: {
+    display: "flex",
+    flexDirection: "row",
+  },
+
   nameText: {
     fontWeight: "700",
   },

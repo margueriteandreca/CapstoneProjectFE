@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   Button,
   View,
@@ -9,14 +9,16 @@ import {
   FlatList,
 } from "react-native";
 import PostCardFull from "./Components/Posts/PostCardFull";
-import { TokenContext } from "./App";
+import { useFocusEffect } from "@react-navigation/native";
+
+import { TokenContext } from "./Context";
 
 function HomeFeed() {
   const [feedPhotos, setFeedPhotos] = useState([]);
 
   const { token } = useContext(TokenContext);
 
-  useEffect(() => {
+  const fetchFeed = useCallback(() => {
     fetch("http://127.0.0.1:8000/feed/", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -27,7 +29,13 @@ function HomeFeed() {
         console.log(`FEED DATA`, data);
         setFeedPhotos(data);
       });
+  }, [token]);
+
+  useEffect(() => {
+    fetchFeed();
   }, []);
+
+  useFocusEffect(fetchFeed);
 
   return (
     <FlatList

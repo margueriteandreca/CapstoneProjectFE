@@ -29,7 +29,7 @@ function LoginSignUp() {
   // console.log(height, width);
 
   const imagePosition = useSharedValue(1);
-  // const formButtonScale = useSharedValue(1);
+
   const [isLogin, setIsLogin] = useState(true);
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
@@ -59,17 +59,11 @@ function LoginSignUp() {
     const interpolation = interpolate(imagePosition.value, [0, 1], [180, 360]);
     return {
       opacity: withTiming(imagePosition.value === 1 ? 0 : 1, { duration: 800 }),
-      transform: [
-        { rotate: withTiming(interpolation + "deg", { duration: 1000 }) },
-      ],
+      // transform: [
+      //   { rotate: withTiming(interpolation + "deg", { duration: 1000 }) },
+      // ],
     };
   });
-
-  // const formButtonAnimatedStyle = useAnimatedStyle(() => {
-  //   return {
-  //     transform: [{ scale: formButtonScale.value }],
-  //   };
-  // });
 
   const formAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -98,7 +92,7 @@ function LoginSignUp() {
             <Ellipse cx={width / 2} rx={height} ry={height + 100} />
           </ClipPath>
           <Image
-            href={require("../assets/gradient-purple.png")}
+            href={require("../assets/kinta.png")}
             width={width + 100}
             height={height + 100}
             preserveAspectRatio="xMidyMid slice"
@@ -127,7 +121,11 @@ function LoginSignUp() {
           </TouchableOpacity>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
-          {isLogin ? <Login /> : <Signup />}
+          {isLogin ? (
+            <Login closeButtonContainerStyle={closeButtonContainerStyle} />
+          ) : (
+            <Signup />
+          )}
         </Animated.View>
       </View>
     </View>

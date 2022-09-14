@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { TokenContext } from "../App";
+import { TokenContext } from "../Context";
 
 const storeLogin = async (token) => {
   console.log("!!! trying token", token);
@@ -43,7 +43,7 @@ function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("!!!! data: ", data);
+        console.log("!!!! Setting Token from fetch: ", data);
         setToken(data.access);
         storeLogin(data.access);
       });
@@ -77,7 +77,7 @@ function Login() {
         onPress={handleLogin}
         underlayColor="#fff"
       >
-        <Text style={styles.loginText}>Login</Text>
+        <Text style={[styles.loginText]}>Login</Text>
       </TouchableOpacity>
     </View>
   );

@@ -11,7 +11,7 @@ import {
 import ProfilePicture from "../ProfilePicture";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import DeletePost from "./DeletePost";
-import { UserContext, TokenContext } from "../../App";
+import { UserContext, TokenContext } from "../../Context";
 
 function PostCardFull({ post, modalVisible, setModalVisible }) {
   const { text, images, like_count, user: postUser, replies, likes } = post;
@@ -89,8 +89,9 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
   };
 
   const navigateToUserProfile = () => {
-    navigate("ProfileSreen", {
-      user,
+    navigate("ProfileScreen", {
+      postUser,
+      isMe: false,
     });
   };
 

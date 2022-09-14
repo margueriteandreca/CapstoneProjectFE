@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useContext } from "react";
-import { TokenContext } from "./App";
+import { TokenContext } from "./Context";
 
 function LogoutFooter() {
   const { navigate } = useNavigation();

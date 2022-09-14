@@ -10,7 +10,7 @@ import {
 import ProfilePicture from "./Components/ProfilePicture";
 import { useContext } from "react";
 
-import { UserContext } from "./App";
+import { UserContext } from "./Context";
 
 function Header() {
   const { user } = useContext(UserContext);

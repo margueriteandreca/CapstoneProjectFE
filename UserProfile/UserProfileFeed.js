@@ -17,12 +17,7 @@ function UserProfileFeed({ userFeed, user }) {
       <FlatList
         data={userFeed}
         renderItem={({ item }) => (
-          <PostPreview
-            key={item}
-            isScheduling={false}
-            post={item}
-            user={user}
-          />
+          <PostPreview key={item} post={item} user={user} />
         )}
         numColumns={3}
       />
@@ -33,7 +28,7 @@ function UserProfileFeed({ userFeed, user }) {
 const userFeedStyles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "60%",
+    height: "65%",
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",

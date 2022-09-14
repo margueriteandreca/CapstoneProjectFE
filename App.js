@@ -28,16 +28,11 @@ import RepliesFull from "./Components/Posts/RepliesFull";
 import PostCardFullScreen from "./Components/Posts/PostCardFullScreen";
 import Drafts from "./Drafts";
 
+import { TokenContext, UserContext } from "./Context";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-
-export const TokenContext = createContext({
-  token: null,
-  setToken: () => {},
-});
-
-export const UserContext = createContext({});
 
 const screenOptions = ({ route }) => ({
   // THESE ARE THE CONFIGS OF HOW BOTTOM TABS SHOW
@@ -71,7 +66,22 @@ function HomeStack() {
       <Stack.Screen
         name="RepliesFull"
         component={RepliesFull}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
+      />
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{ headerBackTitleVisible: false, title: "" }}
+      />
+      <Stack.Screen
+        name="PostCardFull"
+        component={PostCardFull}
+        options={{ headerBackTitleVisible: false, title: "" }}
+      />
+      <Stack.Screen
+        name="PostCardFullScreen"
+        component={PostCardFullScreen}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
     </Stack.Navigator>
   );
@@ -81,34 +91,34 @@ function ProfileStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Profile"
+        name="ProfileScreen"
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PostCardFull"
         component={PostCardFull}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
       <Stack.Screen
         name="Scheduling"
         component={Scheduling}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
       <Stack.Screen
         name="RepliesFull"
         component={RepliesFull}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
       <Stack.Screen
         name="PostCardFullScreen"
         component={PostCardFullScreen}
-        options={{ headerShown: false }}
+        options={{ headerBackTitleVisible: false, title: "" }}
       />
     </Stack.Navigator>
   );
@@ -151,6 +161,9 @@ function LoggedInNavigator() {
     <Drawer.Navigator
       initialRouteName="Home"
       drawerContent={(props) => <CustomDrawer {...props} />}
+      screenOptions={{
+        swipeEnabled: false,
+      }}
     >
       <Drawer.Screen name="Home" component={BottomTabs} />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
@@ -226,7 +239,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(isLoading);
+    console.log("!!! LOGIN IS LOADING:", isLoading);
     if (token) {
       fetch(`http://127.0.0.1:8000/profile/`, {
         headers: {
@@ -235,11 +248,15 @@ function App() {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log("!!! LOGIN IS fetched data:", data);
+
           setIsLoading(false);
           setUserProfile(data);
           setIsLoggedIn(true);
-        });
+        })
+        .catch((e) => console.log("!!! LOGING FAILED DATA: ", e));
     } else if (!token && !isLoading) {
+      console.log("!!! refresh no token", token, isLoading);
       setIsLoggedIn(false);
       deleteToken();
     }

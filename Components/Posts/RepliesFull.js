@@ -12,7 +12,7 @@ import Reply from "./Reply";
 import ReplyKeyboard from "./ReplyKeyboard";
 import { useState, useEffect } from "react";
 
-import { TokenContext } from "../../App";
+import { TokenContext } from "../../Context";
 
 function RepliesFull({ route }) {
   const [reply, setReply] = useState("");

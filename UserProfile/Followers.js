@@ -8,7 +8,14 @@ import {
   StyleSheet,
 } from "react-native";
 
-function Followers({ posts, following, first_name, last_name, username }) {
+function Followers({
+  posts,
+  following,
+  followers,
+  first_name,
+  last_name,
+  username,
+}) {
   console.log("CHILD POSTS", posts);
   return (
     <View style={followersStyles.container}>
@@ -22,7 +29,7 @@ function Followers({ posts, following, first_name, last_name, username }) {
 
         <TouchableOpacity>
           <View style={followersStyles.innerContainer}>
-            <Text>4820</Text>
+            <Text>{followers.length}</Text>
             <Text>Followers</Text>
           </View>
         </TouchableOpacity>
@@ -42,7 +49,7 @@ const followersStyles = StyleSheet.create({
   container: {
     // backgroundColor: "grey",
     width: "75%",
-    height: 120,
+    height: 100,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

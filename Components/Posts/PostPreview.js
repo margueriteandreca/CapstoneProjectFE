@@ -10,7 +10,7 @@ import {
   Animated,
 } from "react-native";
 
-function PostPreview({ isScheduling, post, user }) {
+function PostPreview({ isUnpublished = false, post, user }) {
   const { navigate } = useNavigation();
 
   const handleOpenPost = () => {
@@ -22,13 +22,13 @@ function PostPreview({ isScheduling, post, user }) {
     });
   };
 
-  const handleOpenScheduling = () => {
-    navigate("ProfileStack", { screen: "Scheduling" });
+  const handleOpenUploadScreen = () => {
+    navigate("New Post");
   };
 
   return (
     <TouchableOpacity
-      onPress={isScheduling ? handleOpenScheduling : handleOpenPost}
+      onPress={isUnpublished ? handleOpenUploadScreen : handleOpenPost}
       style={postPreviewStyles.container}
     >
       {post.images[0] ? (
@@ -38,7 +38,7 @@ function PostPreview({ isScheduling, post, user }) {
         />
       ) : (
         <View style={postPreviewStyles.textContainer}>
-          <Text>{post ? post.text : null}</Text>
+          <Text style={postPreviewStyles.text}>{post ? post.text : null}</Text>
         </View>
       )}
     </TouchableOpacity>
@@ -65,6 +65,9 @@ const postPreviewStyles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  text: {
+    fontFamily: "Times New Roman",
   },
 });
 

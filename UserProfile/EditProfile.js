@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import ProfilePicture from "../Components/ProfilePicture";
-import { TokenContext } from "../App";
+import { TokenContext } from "../Context";
 
 ///MUST ADD GOBACK
 
@@ -167,11 +167,12 @@ const editProfileStyles = StyleSheet.create({
     width: "70%",
     height: 50,
     borderRadius: 30,
-    backgroundColor: "indigo",
+    backgroundColor: "#665EC2",
   },
   saveText: {
     color: "white",
     fontSize: 16,
+    fontWeight: "500",
   },
 });
 
