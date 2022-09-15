@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  LayoutAnimation,
+  Image as RNImage,
 } from "react-native";
 import { useWindowDimensions } from "react-native";
 import { useEffect, useState } from "react";
@@ -24,13 +26,12 @@ import Login from "./Login";
 import Signup from "./Signup";
 
 function LoginSignUp() {
-  // const { height, width } = Dimensions.get("window");
   const { height, width } = useWindowDimensions();
-  // console.log(height, width);
 
   const imagePosition = useSharedValue(1);
 
   const [isLogin, setIsLogin] = useState(true);
+  const [logoUp, setLogoUp] = useState();
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -77,58 +78,91 @@ function LoginSignUp() {
   const loginHandler = () => {
     imagePosition.value = 0;
     setIsLogin(true);
+    LayoutAnimation.configureNext({
+      duration: 800,
+      update: { type: "linear" },
+    });
+    setLogoUp(true);
   };
 
   const signUpHandler = () => {
     imagePosition.value = 0;
     setIsLogin(false);
+    LayoutAnimation.configureNext({
+      duration: 800,
+      update: { type: "linear" },
+    });
+    setLogoUp(true);
   };
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
-        <Svg height={height + 100} width={width}>
-          <ClipPath id="clipPathId">
-            <Ellipse cx={width / 2} rx={height} ry={height + 100} />
-          </ClipPath>
-          <Image
-            href={require("../assets/kinta.png")}
-            width={width + 100}
-            height={height + 100}
-            preserveAspectRatio="xMidyMid slice"
-            clipPath="url(#clipPathId)"
-          />
-        </Svg>
-        <Animated.View
-          style={[styles.closeButtonContainer, closeButtonContainerStyle]}
-        >
-          <Text onPress={() => (imagePosition.value = 1)}>✕</Text>
-        </Animated.View>
-      </Animated.View>
-      <View style={{ justifyContent: "center", height: height / 3 }}>
-        <Animated.View style={buttonsAnimatedStyle}>
-          <TouchableOpacity style={styles.button}>
-            <Text onPress={loginHandler} style={styles.buttonText}>
-              LOG IN
+    <>
+      <View style={styles.container}>
+        <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
+          <Svg height={height + 100} width={width}>
+            <ClipPath id="clipPathId">
+              <Ellipse cx={width / 2} rx={height} ry={height + 100} />
+            </ClipPath>
+            <Image
+              href={require("../assets/gradient-purple.png")}
+              width={width + 100}
+              height={height + 100}
+              preserveAspectRatio="xMidyMid slice"
+              clipPath="url(#clipPathId)"
+            />
+          </Svg>
+
+          <Animated.View
+            style={[styles.closeButtonContainer, closeButtonContainerStyle]}
+          >
+            <Text
+              onPress={() => {
+                imagePosition.value = 1;
+                LayoutAnimation.configureNext({
+                  duration: 800,
+                  update: { type: "linear" },
+                });
+                setLogoUp(false);
+              }}
+            >
+              ✕
             </Text>
-          </TouchableOpacity>
+          </Animated.View>
         </Animated.View>
-        <Animated.View style={buttonsAnimatedStyle}>
-          <TouchableOpacity style={styles.button}>
-            <Text onPress={signUpHandler} style={styles.buttonText}>
-              SIGN UP
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-        <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
-          {isLogin ? (
-            <Login closeButtonContainerStyle={closeButtonContainerStyle} />
-          ) : (
-            <Signup />
-          )}
-        </Animated.View>
+        <View style={{ justifyContent: "center", height: height / 3 }}>
+          <Animated.View style={buttonsAnimatedStyle}>
+            <TouchableOpacity style={styles.button}>
+              <Text onPress={loginHandler} style={styles.buttonText}>
+                LOG IN
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={buttonsAnimatedStyle}>
+            <TouchableOpacity style={styles.button}>
+              <Text onPress={signUpHandler} style={styles.buttonText}>
+                SIGN UP
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
+            {isLogin ? (
+              <Login
+                closeButtonContainerStyle={closeButtonContainerStyle}
+                setLogoUp={setLogoUp}
+              />
+            ) : (
+              <Signup />
+            )}
+          </Animated.View>
+        </View>
       </View>
-    </View>
+      <View style={logoUp ? styles.upStyle : styles.downStyle}>
+        <RNImage
+          source={require("../assets/kinta-logo-2.png")}
+          style={{ height: 400, width: 200, resizeMode: "contain" }}
+        />
+      </View>
+    </>
   );
 }
 
@@ -155,6 +189,30 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
     letterSpacing: 0.5,
+  },
+  upStyle: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 300,
+    width: 200,
+    zIndex: 999,
+    top: 100,
+    right: 0,
+    bottom: 0,
+    left: 95,
+  },
+  downStyle: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 300,
+    width: 200,
+    zIndex: 999,
+    top: 250,
+    right: 0,
+    bottom: 0,
+    left: 95,
   },
   // bottomContainer: {
   //   justifyContent: "center",

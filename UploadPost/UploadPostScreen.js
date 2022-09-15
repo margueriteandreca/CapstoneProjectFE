@@ -57,7 +57,7 @@ function UploadPostScreen() {
     uploadPost(true);
   };
 
-  const uploadPost = (isDraft = false) => {
+  const uploadPost = (isDraft = false, isSchedule = false) => {
     let body = {};
     if (postImage) {
       console.log("!!! IMAGE", postImage.base64);
@@ -69,7 +69,7 @@ function UploadPostScreen() {
     if (isDraft) {
       body.is_draft = true;
     }
-    if (date) {
+    if (date && isSchedule) {
       body.publication_datetime = date;
     }
 
@@ -136,13 +136,35 @@ function UploadPostScreen() {
             <Text style={uploadStyles.schedulingText}>Schedule post</Text>
           </TouchableOpacity>
           {date && (
-            <Text>
-              {date.toLocaleDateString()} {date.toLocaleTimeString()}
-            </Text>
+            <View
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  height: 35,
+                }}
+              >
+                <Text style={uploadStyles.postingText}>Posting at: </Text>
+                <Text style={uploadStyles.postingText}>
+                  {date.toLocaleDateString()} {date.toLocaleTimeString()}
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => uploadPost(false, true)}>
+                <Text
+                  style={{ fontSize: 18, color: "green", fontWeight: "700" }}
+                >
+                  Confirm
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
-          <TouchableOpacity>
-            <Text style={{ color: "green", fontWeight: "500" }}>Confirm</Text>
-          </TouchableOpacity>
         </View>
       </View>
       <DateTimePickerModal
@@ -181,7 +203,6 @@ const uploadStyles = StyleSheet.create({
     // justifyContent: "space-between",
   },
   postContainer: {
-    backgroundColor: "purple",
     display: "flex",
     height: 480,
     width: "100%",
@@ -200,7 +221,7 @@ const uploadStyles = StyleSheet.create({
   shareText: {
     fontWeight: "700",
     fontSize: 18,
-    color: "#3777f0",
+    color: "#4A4199",
   },
   schedulingContainer: {
     display: "flex",
@@ -220,13 +241,17 @@ const uploadStyles = StyleSheet.create({
     width: 220,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#3777f0",
+    backgroundColor: "#4A4199",
     marginBottom: 10,
   },
   draftsText: {
     fontWeight: "700",
     fontSize: 18,
-    color: "#3777f0",
+    color: "#4A4199",
+  },
+  postingText: {
+    fontSize: 16,
+    fontWeight: "500",
   },
   modal: {
     height: 200,

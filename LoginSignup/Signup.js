@@ -8,7 +8,20 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import * as SecureStore from "expo-secure-store";
+
+import { TokenContext } from "../Context";
+
+const storeLogin = async (token) => {
+  console.log("!!! trying token", token);
+  try {
+    await SecureStore.setItemAsync("myToken", token);
+    console.log("!!! stored token", token);
+  } catch (e) {
+    console.log("ASYNC STORAGE SET ERROR", e);
+  }
+};
 
 function Signup() {
   const [username, setUsername] = useState(null);
@@ -16,27 +29,30 @@ function Signup() {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
 
+  const { token, setToken } = useContext(TokenContext);
+
   const handleSignUp = () => {
-    //     const newUser = {
-    //       username: username,
-    //       password: password,
-    //       first_name: firstName,
-    //       last_name: lastName,
-    //     };
-    //     fetch("http://localhost:3000/users", {
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json",
-    //       },
-    //       method: "POST",
-    //       body: JSON.stringify(newUser),
-    //     }) //POST, send token as body , getter funcion
-    //       .then((res) => res.json())
-    //       .then((data) => {
-    //         console.log(data);
-    //         setUser(data.user);
-    //       });
-    //     setIsLoggedIn(true);
+    const newUser = {
+      username: username,
+      password1: password,
+      password2: password,
+      first_name: firstName,
+      last_name: lastName,
+    };
+    fetch("http://127.0.0.1:8000/dj-rest-auth/registration/", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(newUser),
+    }) //POST, send token as body , getter funcion
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("!!!! Setting Token from fetch: ", data);
+        setToken(data.access_token);
+        storeLogin(data.access_token);
+      });
   };
 
   return (

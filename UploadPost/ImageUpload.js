@@ -98,7 +98,7 @@ const imageUploadStyles = StyleSheet.create({
     display: "flex",
     height: "87%",
     width: "100%",
-    marginBottom: 5,
+    marginBottom: 10,
     backgroundColor: "#d5d4d6",
     justifyContent: "center",
     alignItems: "center",
@@ -108,7 +108,7 @@ const imageUploadStyles = StyleSheet.create({
     marginTop: 15,
     fontWeight: "700",
     fontSize: 18,
-    color: "#3777f0",
+    color: "#4A4199",
   },
   buttonContainer: {
     display: "flex",

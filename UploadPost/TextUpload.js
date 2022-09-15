@@ -49,7 +49,7 @@ const textPostStyles = StyleSheet.create({
     marginLeft: 5,
     fontWeight: "700",
     fontSize: 18,
-    color: "#3777f0",
+    color: "#4A4199",
   },
   input: {
     height: "90%",

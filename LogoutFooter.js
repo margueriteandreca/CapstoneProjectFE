@@ -25,7 +25,7 @@ function LogoutFooter() {
     <TouchableOpacity
       onPress={handleLogout}
       style={{
-        backgroundColor: "whitesmoke",
+        backgroundColor: "#4A4199",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -37,7 +37,9 @@ function LogoutFooter() {
         left: 20,
       }}
     >
-      <Text style={{ fontSize: 16 }}>Log out</Text>
+      <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>
+        Log out
+      </Text>
     </TouchableOpacity>
   );
 }

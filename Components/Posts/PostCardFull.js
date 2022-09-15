@@ -121,8 +121,13 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
             style={postCardFullStyles.image}
           />
         ) : (
-          <View style={postCardFullStyles.textContainer}>
-            <Text style={postCardFullStyles.text}>{post ? text : null}</Text>
+          <View style={postCardFullStyles.textOuter}>
+            <View style={postCardFullStyles.textContainer}>
+              <View
+                style={{ width: 3, height: "90%", backgroundColor: "#665EC2" }}
+              ></View>
+              <Text style={postCardFullStyles.text}>{post ? text : null}</Text>
+            </View>
           </View>
         )}
       </View>
@@ -142,38 +147,48 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
       </View>
 
       <View style={postCardFullStyles.likesContainer}>
-        <Text>
+        <Text style={{ fontSize: 16 }}>
           {`${likeCount}`} {likeCount === 1 ? `like` : `likes`}
         </Text>
       </View>
 
       <View style={postCardFullStyles.repliesContainer}>
-        <View style={postCardFullStyles.replyPreview}>
-          <Text style={postCardFullStyles.usernameText}>
-            {replies &&
-              replies[replies.length - 1] &&
-              replies[replies.length - 1].user.username}
-            {"  "}
-          </Text>
-          <Text>
-            {replies &&
-              replies[replies.length - 1] &&
-              replies[replies.length - 1].text}
-          </Text>
-        </View>
-        <View style={postCardFullStyles.replyPreview}>
-          <Text style={postCardFullStyles.usernameText}>
-            {replies &&
-              replies[replies.length - 2] &&
-              replies[replies.length - 2].user.username}
-            {"  "}
-          </Text>
-          <Text>
-            {replies &&
-              replies[replies.length - 2] &&
-              replies[replies.length - 2].text}
-          </Text>
-        </View>
+        {replies && replies.length > 0 ? (
+          <>
+            <View style={postCardFullStyles.replyPreview}>
+              <Text style={postCardFullStyles.usernameText}>
+                {replies &&
+                  replies[replies.length - 1] &&
+                  replies[replies.length - 1].user.username}
+                {"  "}
+              </Text>
+              <Text style={{ fontSize: 16 }}>
+                {replies &&
+                  replies[replies.length - 1] &&
+                  replies[replies.length - 1].text}
+              </Text>
+            </View>
+            <View style={postCardFullStyles.replyPreview}>
+              <Text style={postCardFullStyles.usernameText}>
+                {replies &&
+                  replies[replies.length - 2] &&
+                  replies[replies.length - 2].user.username}
+                {"  "}
+              </Text>
+              <Text style={{ fontSize: 16 }}>
+                {replies &&
+                  replies[replies.length - 2] &&
+                  replies[replies.length - 2].text}
+              </Text>
+            </View>
+          </>
+        ) : (
+          <TouchableOpacity onPress={handleViewAllReplies}>
+            <Text style={postCardFullStyles.viewAllText}>
+              Reply to {`@${postUser.username}`}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={handleViewAllReplies}>
           {replies && replies.length > 2 && (
             <Text style={postCardFullStyles.viewAllText}>View all replies</Text>
@@ -190,7 +205,7 @@ const postCardFullStyles = StyleSheet.create({
     justifyContent: "flex-start",
     height: 600,
     width: "100%",
-    // backgroundColor: "purple",
+    // backgroundColor: "red",
   },
   innerContainer: {
     display: "flex",
@@ -205,23 +220,36 @@ const postCardFullStyles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  textContainer: {
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 40,
-    paddingVertical: 20,
+  textOuter: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "white",
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+  },
+  textContainer: {
+    width: "90%",
+    height: "80%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "red",
   },
   text: {
-    fontFamily: "Times New Roman",
-    fontSize: 18,
+    fontFamily: "Georgia",
+    fontSize: 20,
+    marginLeft: 10,
   },
   username: {
     fontSize: 18,
     fontWeight: "500",
     letterSpacing: 0.3,
+    fontSize: 16,
   },
   likesRepliesContainer: {
     // backgroundColor: "green",
@@ -251,6 +279,7 @@ const postCardFullStyles = StyleSheet.create({
   },
   usernameText: {
     fontWeight: "700",
+    fontSize: 16,
   },
   headerContainer: {
     display: "flex",

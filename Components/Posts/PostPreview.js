@@ -38,7 +38,16 @@ function PostPreview({ isUnpublished = false, post, user }) {
         />
       ) : (
         <View style={postPreviewStyles.textContainer}>
-          <Text style={postPreviewStyles.text}>{post ? post.text : null}</Text>
+          <View
+            style={{ width: 2, height: "90%", backgroundColor: "#665EC2" }}
+          ></View>
+          <Text
+            numberOfLines={4}
+            ellipsizeMode="tail"
+            style={postPreviewStyles.text}
+          >
+            {post ? post.text : null}
+          </Text>
         </View>
       )}
     </TouchableOpacity>
@@ -56,9 +65,10 @@ const postPreviewStyles = StyleSheet.create({
   textContainer: {
     width: "100%",
     height: "100%",
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     paddingVertical: 5,
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -67,7 +77,7 @@ const postPreviewStyles = StyleSheet.create({
     height: "100%",
   },
   text: {
-    fontFamily: "Times New Roman",
+    fontFamily: "Georgia",
   },
 });
 

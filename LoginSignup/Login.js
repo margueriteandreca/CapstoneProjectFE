@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { TokenContext } from "../Context";
+import { set } from "react-native-reanimated";
 
 const storeLogin = async (token) => {
   console.log("!!! trying token", token);
@@ -23,7 +24,7 @@ const storeLogin = async (token) => {
   }
 };
 
-function Login() {
+function Login({ setLogoUp }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

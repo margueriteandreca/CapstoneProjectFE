@@ -20,6 +20,20 @@ function UserProfileBio({ userBio, userPosts, isMe }) {
     });
   };
 
+  const handleFollowUser = () => {
+    fetch(`http://127.0.0.1:8000/follow/${id}`, {
+      method: "POST",
+      body: JSON.stringify({ a: 1, b: 2 }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   return (
     <View style={userBioStyles.container}>
       <View style={userBioStyles.photoFollowersContainer}>

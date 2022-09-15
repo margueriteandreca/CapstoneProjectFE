@@ -27,6 +27,7 @@ import LogoutFooter from "./LogoutFooter";
 import RepliesFull from "./Components/Posts/RepliesFull";
 import PostCardFullScreen from "./Components/Posts/PostCardFullScreen";
 import Drafts from "./Drafts";
+import Discover from "./Discover";
 
 import { TokenContext, UserContext } from "./Context";
 
@@ -40,6 +41,8 @@ const screenOptions = ({ route }) => ({
     switch (route.name) {
       case "HomeStack":
         return <Entypo name="home" size={24} color="black" />;
+      case "Discover":
+        return <FontAwesome name="search" size={24} color="black" />;
       case "ProfileStack":
         return <FontAwesome name="user-circle-o" size={24} color="black" />;
       default:
@@ -134,6 +137,11 @@ function BottomTabs() {
         options={{ headerShown: false }}
       />
       <Tab.Screen
+        name="Discover"
+        component={Discover}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
         options={{ headerShown: false }}
@@ -165,7 +173,11 @@ function LoggedInNavigator() {
         swipeEnabled: false,
       }}
     >
-      <Drawer.Screen name="Home" component={BottomTabs} />
+      <Drawer.Screen
+        name="Home"
+        component={BottomTabs}
+        options={{ title: "Kinta" }}
+      />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
       <Drawer.Screen name="Drafts" component={Drafts} />
       <Drawer.Screen name="New Post" component={UploadPostScreen} />
@@ -182,16 +194,6 @@ function LoggedOutNavigator() {
         component={LoginSignUp}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="LogIn"
-        component={Login}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={Signup}
-        options={{ headerShown: false }}
-      /> */}
     </Stack.Navigator>
   );
 }

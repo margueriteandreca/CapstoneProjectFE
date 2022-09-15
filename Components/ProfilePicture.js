@@ -9,6 +9,10 @@ import {
 } from "react-native";
 
 function ProfilePicture({ isBig, avatar }) {
+  const prefix = "http://127.0.0.1:8000/";
+
+  const uri = avatar && avatar.includes(prefix) ? avatar : `${prefix}${avatar}`;
+
   return (
     <View
       style={
@@ -18,7 +22,7 @@ function ProfilePicture({ isBig, avatar }) {
       }
     >
       <Image
-        source={{ uri: `http://127.0.0.1:8000/${avatar}` }}
+        source={{ uri }}
         style={
           isBig
             ? profilePictureStyles.bigImage
