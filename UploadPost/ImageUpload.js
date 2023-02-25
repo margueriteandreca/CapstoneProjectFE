@@ -13,14 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useRoute } from "@react-navigation/native";
 
-function ImageUpload() {
-  const [image, setImage] = useState(null);
+function ImageUpload({ postImage, setPostImage }) {
   const [isShowingPicker, setIsShowingPicker] = useState(true);
-  const { params } = useRoute();
-
-  useEffect(() => {
-    params.setPostImage(image);
-  }, [image]);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -33,20 +27,17 @@ function ImageUpload() {
     });
 
     if (!result.cancelled) {
-      console.log("!!! RESUTL", result);
-      setImage(result);
+      setPostImage(result);
       setIsShowingPicker(false);
     }
   };
-
-  console.log(image);
 
   return (
     <>
       <View style={imageUploadStyles.container}>
         <Text style={imageUploadStyles.text}>Upload an image</Text>
         <View style={imageUploadStyles.innerContainer}>
-          {isShowingPicker ? (
+          {isShowingPicker && postImage === null ? (
             <TouchableOpacity
               style={imageUploadStyles.buttonContainer}
               onPress={pickImage}
@@ -70,7 +61,7 @@ function ImageUpload() {
               }}
             >
               <Image
-                source={{ uri: image.uri }}
+                source={{ uri: postImage.uri }}
                 style={{
                   width: 250,
                   height: 250,

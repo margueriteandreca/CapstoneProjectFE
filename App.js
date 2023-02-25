@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Button, View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  Button,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  LogBox,
+} from "react-native";
 import { useEffect, useState, createContext } from "react";
 import * as SecureStore from "expo-secure-store";
 
@@ -30,6 +37,8 @@ import Drafts from "./Drafts";
 import Discover from "./Discover";
 
 import { TokenContext, UserContext } from "./Context";
+
+LogBox.ignoreAllLogs();
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -180,7 +189,12 @@ function LoggedInNavigator() {
       />
       <Drawer.Screen name="Scheduled Posts" component={ScheduledPosts} />
       <Drawer.Screen name="Drafts" component={Drafts} />
-      <Drawer.Screen name="New Post" component={UploadPostScreen} />
+      <Drawer.Screen
+        name="New Post"
+        component={UploadPostScreen}
+        options={{ unmountOnBlur: true }}
+        param
+      />
     </Drawer.Navigator>
   );
 }

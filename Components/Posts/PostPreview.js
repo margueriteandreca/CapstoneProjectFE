@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Animated,
 } from "react-native";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 
 function PostPreview({ isUnpublished = false, post, user }) {
   const { navigate } = useNavigation();
@@ -23,7 +24,9 @@ function PostPreview({ isUnpublished = false, post, user }) {
   };
 
   const handleOpenUploadScreen = () => {
-    navigate("New Post");
+    navigate("New Post", {
+      patchPost: post,
+    });
   };
 
   return (
@@ -38,9 +41,10 @@ function PostPreview({ isUnpublished = false, post, user }) {
         />
       ) : (
         <View style={postPreviewStyles.textContainer}>
-          <View
-            style={{ width: 2, height: "90%", backgroundColor: "#665EC2" }}
-          ></View>
+          <View style={{}}>
+            <FontAwesome name="quote-left" size={20} color="#9c7aff" />
+          </View>
+
           <Text
             numberOfLines={4}
             ellipsizeMode="tail"
@@ -48,6 +52,9 @@ function PostPreview({ isUnpublished = false, post, user }) {
           >
             {post ? post.text : null}
           </Text>
+          <View style={{ left: 80 }}>
+            <FontAwesome name="quote-right" size={20} color="#9c7aff" />
+          </View>
         </View>
       )}
     </TouchableOpacity>
@@ -68,15 +75,16 @@ const postPreviewStyles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     display: "flex",
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   image: {
     width: "100%",
     height: "100%",
   },
   text: {
+    marginLeft: 5,
     fontFamily: "Georgia",
   },
 });

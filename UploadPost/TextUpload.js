@@ -13,21 +13,14 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
 
-function TextUpload() {
-  const [text, setText] = useState("");
-  const { params } = useRoute();
-
-  useEffect(() => {
-    params.setPostText(text);
-  }, [text]);
-
+function TextUpload({ postText, setPostText }) {
   return (
     <View style={textPostStyles.container}>
       <Text style={textPostStyles.text}>Create a text post</Text>
       <TextInput
         style={textPostStyles.input}
-        onChangeText={setText}
-        value={text}
+        onChangeText={setPostText}
+        value={postText}
         multiline={true}
         numberOfLines={4}
         maxLength={255}

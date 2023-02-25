@@ -7,8 +7,11 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 
-function ProfilePicture({ isBig, avatar }) {
+const defaultImage = () => <FontAwesome name="user" size={24} color="gray" />;
+
+function ProfilePicture({ isBig, avatar = defaultImage() }) {
   const prefix = "http://127.0.0.1:8000/";
 
   const uri = avatar && avatar.includes(prefix) ? avatar : `${prefix}${avatar}`;

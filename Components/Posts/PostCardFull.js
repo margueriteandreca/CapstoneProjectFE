@@ -122,11 +122,18 @@ function PostCardFull({ post, modalVisible, setModalVisible }) {
           />
         ) : (
           <View style={postCardFullStyles.textOuter}>
+            <View style={{}}>
+              <FontAwesome name="quote-left" size={24} color="#9c7aff" />
+            </View>
+
             <View style={postCardFullStyles.textContainer}>
-              <View
+              {/* <View
                 style={{ width: 3, height: "90%", backgroundColor: "#665EC2" }}
-              ></View>
+              ></View> */}
               <Text style={postCardFullStyles.text}>{post ? text : null}</Text>
+            </View>
+            <View style={{ left: 280 }}>
+              <FontAwesome name="quote-right" size={24} color="#9c7aff" />
             </View>
           </View>
         )}
@@ -222,9 +229,9 @@ const postCardFullStyles = StyleSheet.create({
   },
   textOuter: {
     display: "flex",
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "flexstart",
     width: "100%",
     height: "100%",
     backgroundColor: "white",
@@ -232,13 +239,16 @@ const postCardFullStyles = StyleSheet.create({
     paddingVertical: 20,
   },
   textContainer: {
-    width: "90%",
+    width: "100%",
     height: "80%",
     display: "flex",
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 25,
+    // // alignItems: "center",
     // backgroundColor: "red",
+    // borderWidth: 1,
+    // borderColor: "purple",
   },
   text: {
     fontFamily: "Georgia",

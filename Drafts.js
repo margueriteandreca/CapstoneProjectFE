@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   Button,
   View,
@@ -16,7 +17,7 @@ function Drafts({ navigation }) {
 
   const { token } = useContext(TokenContext);
 
-  useEffect(() => {
+  const fetchDrafts = useCallback(() => {
     fetch("http://127.0.0.1:8000/drafts/", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -29,15 +30,20 @@ function Drafts({ navigation }) {
       });
   }, []);
 
+  useEffect(() => {
+    fetchDrafts();
+  }, []);
+
+  useFocusEffect(fetchDrafts);
+
   return (
     <View style={draftStyles.container}>
       <FlatList
         data={drafts}
         renderItem={({ item }) => (
-          <View>
-            <PostPreview key={item.id} post={item} isUnpublished={true} />
-          </View>
+          <PostPreview key={item.id} post={item} isUnpublished={true} />
         )}
+        numColumns={3}
       />
     </View>
   );

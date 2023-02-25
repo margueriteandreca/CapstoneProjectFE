@@ -33,7 +33,7 @@ function Discover() {
         console.log("ALL USERS", data, currentUser);
         setAllUsers(data);
       });
-  }, [token, id]);
+  }, [token]);
 
   useEffect(() => {
     fetchUsers();

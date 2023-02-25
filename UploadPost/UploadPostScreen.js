@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useState, useContext } from "react";
 import {
   Button,
@@ -16,21 +16,64 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import TextUpload from "./TextUpload";
 import ImageUpload from "./ImageUpload";
 
-import { useNavigation } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+  CommonActions,
+} from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();
 
 function UploadPostScreen() {
+  const { params } = useRoute();
+
+  const [isPatch, setIsPatch] = useState(false);
+  const [postIdToPatch, setPostIdToPatch] = useState(null);
   const [postText, setPostText] = useState(null);
   const [postImage, setPostImage] = useState(null);
   const [date, setDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
+  const { navigate } = navigation;
 
   const { token } = useContext(TokenContext);
+
+  const handleCancel = () => {
+    setDate(null);
+    setPostImage(null);
+    setPostText(null);
+    setIsPatch(false);
+    setPostIdToPatch(null);
+  };
+
+  const setPostFromParams = useCallback(() => {
+    if (params && params.patchPost) {
+      const { publication_datetime, images, text, id } = params.patchPost;
+      const postDate = new Date(publication_datetime);
+      const now = new Date();
+      if (now.getTime() < postDate.getTime()) {
+        setDate(new Date(publication_datetime));
+      }
+      setPostText(text);
+      if (images && images[0]) {
+        const prefix = "http://127.0.0.1:8000";
+        const img = images[0].image;
+        const uri = img && img.includes(prefix) ? img : `${prefix}${img}`;
+        setPostImage({ uri });
+      }
+      setPostIdToPatch(id);
+      setIsPatch(true);
+      navigation.setParams({ patchPost: undefined });
+    } else {
+      handleCancel();
+    }
+  }, []);
+
+  useFocusEffect(setPostFromParams);
 
   const showDatePicker = () => {
     setIsOpen(true);
@@ -49,28 +92,30 @@ function UploadPostScreen() {
     }, 800);
   };
 
-  const handleOpenScheduling = () => {
-    navigate("ProfileStack", { screen: "Scheduling" });
-  };
-
   const handleSaveDraft = () => {
     uploadPost(true);
   };
 
   const uploadPost = (isDraft = false, isSchedule = false) => {
     let body = {};
-    if (postImage) {
-      console.log("!!! IMAGE", postImage.base64);
+    if (postImage && postImage.base64) {
       body.image = postImage.base64;
     }
     if (postText) {
       body.text = postText;
     }
-    if (isDraft) {
-      body.is_draft = true;
-    }
     if (date && isSchedule) {
       body.publication_datetime = date;
+    }
+    if (postIdToPatch) {
+      body.id = postIdToPatch;
+      if (date === null || isSchedule === false) {
+        body.publication_datetime = new Date();
+      }
+      body.is_draft = false;
+    }
+    if (isDraft) {
+      body.is_draft = true;
     }
 
     fetch("http://127.0.0.1:8000/new_post/", {
@@ -78,13 +123,15 @@ function UploadPostScreen() {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: isPatch ? "PATCH" : "POST",
       body: JSON.stringify(body),
     })
       .then((res) => res.json())
       .then((data) => {
         if (isDraft) {
           navigate("Drafts");
+        } else if (isSchedule) {
+          navigate("Scheduled Posts");
         } else {
           navigate("Home", { screen: "ProfileStack" });
         }
@@ -98,20 +145,22 @@ function UploadPostScreen() {
         <Tab.Navigator>
           <Tab.Screen
             name="Text"
-            component={TextUpload}
-            initialParams={{ setPostText }}
+            children={() => (
+              <TextUpload setPostText={setPostText} postText={postText} />
+            )}
           />
           <Tab.Screen
             name="Image"
-            component={ImageUpload}
-            initialParams={{ setPostImage }}
+            children={() => (
+              <ImageUpload setPostImage={setPostImage} postImage={postImage} />
+            )}
           />
         </Tab.Navigator>
       </View>
 
       <View style={uploadStyles.schedulingContainer}>
         <View style={uploadStyles.uploadNow}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={handleCancel}>
             <Text style={uploadStyles.draftsText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity

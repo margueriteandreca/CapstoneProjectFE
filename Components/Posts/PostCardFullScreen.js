@@ -1,4 +1,10 @@
-import React, { useState, useRef, useMemo, useCallback } from "react";
+import React, {
+  useContext,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Button,
@@ -12,12 +18,37 @@ import {
   Pressable,
 } from "react-native";
 import PostCardFull from "./PostCardFull";
+import { TokenContext } from "../../Context";
 
 function PostCardFullScreen() {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const navigation = useNavigation();
+
+  const { token } = useContext(TokenContext);
+
   const { params } = useRoute();
   const { post } = params;
+
+  const handleDeletePost = () => {
+    console.log("handle delete");
+    fetch(`http://127.0.0.1:8000/new_post/`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: post.id,
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+    setModalVisible(!modalVisible);
+    navigation.goBack();
+  };
 
   return (
     <>
@@ -45,7 +76,7 @@ function PostCardFullScreen() {
                   modalStyles.buttonContainer,
                   { backgroundColor: "red" },
                 ]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={handleDeletePost}
               >
                 <Text style={modalStyles.textStyle}>Delete post</Text>
               </Pressable>

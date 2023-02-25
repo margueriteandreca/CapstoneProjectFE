@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   Button,
   View,
@@ -16,7 +17,7 @@ function ScheduledPosts({ navigation }) {
 
   const { token } = useContext(TokenContext);
 
-  useEffect(() => {
+  const fetchScheduledPosts = useCallback(() => {
     fetch("http://127.0.0.1:8000/scheduled/", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -29,15 +30,20 @@ function ScheduledPosts({ navigation }) {
       });
   }, []);
 
+  useEffect(() => {
+    fetchScheduledPosts();
+  }, []);
+
+  useFocusEffect(fetchScheduledPosts);
+
   return (
     <View style={scheduledPostsStyles.container}>
       <FlatList
         data={scheduledPosts}
         renderItem={({ item }) => (
-          <View>
-            <PostPreview key={item.id} post={item} isUnpublished={true} />
-          </View>
+          <PostPreview key={item.id} post={item} isUnpublished={true} />
         )}
+        numColumns={3}
       />
     </View>
   );
